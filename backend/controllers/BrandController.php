@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\Brand;
+use yii\helpers\Url;
 use yii\web\UploadedFile;
 
 class BrandController extends \yii\web\Controller
@@ -39,9 +40,30 @@ class BrandController extends \yii\web\Controller
         return $this->render('add',['model'=>$model]);
     }
 
+    //列表
     public function actionIndex()
     {
-        return $this->render('index');
+        $models = Brand::find()->all();
+        return $this->render('index',['models'=>$models]);
     }
 
+    //修改
+    public function actionEdit($id){
+        $model = Brand::findOne($id);
+        //var_dump($model);exit;
+        $request = \Yii::$app->request;
+        if($request->isPost){
+            $model->load($request->post());
+            if($model->validate()){
+                //验证成功
+                $model->save();
+                \Yii::$app->session->setFlash('success','修改成功');
+                return $this->redirect(Url::to(['brand/index']));
+            }else{
+                //验证失败
+                return $model->getErrors();
+            }
+        }
+        return $this->render('edit',['model'=>$model]);
+    }
 }

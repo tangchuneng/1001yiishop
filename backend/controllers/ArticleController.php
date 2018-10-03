@@ -3,9 +3,11 @@
 namespace backend\controllers;
 
 use app\models\Article_Category;
+use yii\helpers\Url;
 
 class ArticleController extends \yii\web\Controller
 {
+    //文章分类列表
     public function actionCategoryIndex()
     {
         $categorys = Article_Category::find()->All();
@@ -23,7 +25,7 @@ class ArticleController extends \yii\web\Controller
                 //验证成功
                 $model->save();
                 \Yii::$app->session->setFlash('success','添加成功');
-                $this->redirect(['article/category-index']);
+                $this->redirect([Url::to(['article/category-index'])]);
             }else{
                 //验证失败
                 return $model->getErrors();
@@ -42,7 +44,7 @@ class ArticleController extends \yii\web\Controller
                 //验证成功
                 $model->save();
                 \Yii::$app->session->setFlash('success','修改成功');
-                return $this->redirect(['article/category-index']);
+                return $this->redirect(Url::to(['article/category-index']));
             }else{
                 //验证失败
                 return $model->getErrors();
