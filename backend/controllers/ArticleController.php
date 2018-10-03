@@ -14,5 +14,7 @@ class ArticleController extends \yii\web\Controller
     //添加文章分类
     public function actionAddCategory(){
         $model = new Article_Category();
+
+        return $this->render('addCategory',['model'=>$model]);
     }
 }
