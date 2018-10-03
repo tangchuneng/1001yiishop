@@ -33,7 +33,7 @@ class BrandController extends \yii\web\Controller
                 \Yii::$app->session->setFlash('success','品牌添加成功!');
                 $this->redirect(['brand/index']);
             }else{
-                $model->getErrors();
+                return $model->getErrors();
             }
         }
         return $this->render('add',['model'=>$model]);
