@@ -16,7 +16,7 @@ use Yii;
  */
 class Brand extends \yii\db\ActiveRecord
 {
-    public $file;//保存上传文件
+    //public $file;//保存上传文件
     /**
      * @inheritdoc
      */
@@ -36,7 +36,7 @@ class Brand extends \yii\db\ActiveRecord
             [['sort', 'is_delete'], 'integer'],
             [['name'], 'string', 'max' => 50],
             [['logo'], 'string', 'max' => 255],
-            ['file','file','extensions'=>['jpg','png','gif']]
+            //['file','file','extensions'=>['jpg','png','gif']]
         ];
     }
 
@@ -49,7 +49,7 @@ class Brand extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => '品牌名称',
             'intro' => '品牌简介',
-            'logo' => 'logo图片',
+            'logo' => 'logo',
             'sort' => '排序',
             'is_delete' => '状态',
         ];

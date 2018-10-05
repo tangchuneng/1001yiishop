@@ -1,4 +1,10 @@
 {
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.org"
+        }
+    },
     "name": "yiisoft/yii2-app-advanced",
     "description": "Yii 2 Advanced Project Template",
     "keywords": ["yii2", "framework", "advanced", "project template"],
@@ -18,7 +24,9 @@
         "yiisoft/yii2": "~2.0.6",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
-        "flyok666/yii2-uploadifive": "~1.0.0"
+        "flyok666/yii2-uploadifive": "^1.0",
+        "flyok666/yii2-qiniu": "~1.0.0",
+        "creocoder/yii2-nested-sets": "^0.9.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
