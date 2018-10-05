@@ -36,14 +36,15 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+        //地址美化,地址重写,伪静态
         'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
+            'enablePrettyUrl' => false,//是否启用美化地址
+            'showScriptName' => false,//是否显示脚本文件
+            //'suffix' => '.html',//设置伪静态后缀
             'rules' => [
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];

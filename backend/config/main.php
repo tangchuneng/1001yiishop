@@ -10,6 +10,14 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
+
+    //设置语言
+    'language' => 'zh-CN',
+    //设置布局文件(false表示关闭)
+    //'layout'=>'diy_main',//在这里设置会影响到整个项目
+    //修改默认路由
+    //'defaultRoute' => 'day2/index',//注:如果控制器后面是index,可以省略不写
+
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
