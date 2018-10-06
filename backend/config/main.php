@@ -16,7 +16,7 @@ return [
     //设置布局文件(false表示关闭)
     //'layout'=>'diy_main',//在这里设置会影响到整个项目
     //修改默认路由
-    //'defaultRoute' => 'day2/index',//注:如果控制器后面是index,可以省略不写
+    //'defaultRoute' => 'brand/index',//注:如果控制器后面是index,可以省略不写
 
     'bootstrap' => ['log'],
     'modules' => [],
@@ -45,14 +45,16 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+        //地址美化,地址重写,伪静态
         'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
+            'class' => 'yii\web\UrlManager',//指定实现类
+            'enablePrettyUrl' => true,//是否启用地址美化
+            'showScriptName' => false,//是否显示脚本文件(index.php)
+            //'suffix' => '.html',//设置伪静态后缀
             'rules' => [
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];

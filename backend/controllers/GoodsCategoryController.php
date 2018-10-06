@@ -3,13 +3,15 @@
 namespace backend\controllers;
 
 use backend\models\GoodsCategory;
+use yii\helpers\Url;
 
 class GoodsCategoryController extends \yii\web\Controller
 {
     //分类列表
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = GoodsCategory::find()->all();
+        return $this->render('index',['categories'=>$model]);
     }
 
     //添加
@@ -34,13 +36,12 @@ class GoodsCategoryController extends \yii\web\Controller
 
                 //$model->save();
                 \Yii::$app->session->setFlash('success','添加成功!');
-                return $this->redirect(['goods-category/index']);
+                return $this->redirect(Url::to(['goods-category/index']));
             }else{
                 //验证失败
                 return $model->getErrors();
             }
         }
-        //转换成json数据格式再传过去
         return $this->render('add',['model'=>$model]);
     }
 
@@ -69,5 +70,50 @@ class GoodsCategoryController extends \yii\web\Controller
         $categories = GoodsCategory::find()->select(['id','parent_id','name'])->asArray()->all();
         //var_dump($categories);exit;
         return $this->renderPartial('ztree',['categories'=>$categories]);
+    }
+
+    //删除
+    public function actionDel($id){
+        //$id = \Yii::$app->request->post('id');
+        $model = GoodsCategory::findOne(['id'=>$id]);
+
+        //判断是否是叶子节点(是否有子节点)
+        if($model->isLeaf()){
+            //删除当前节点及其子节点
+            $model->deleteWithChildren();
+        }
+    }
+
+    //修改
+    public function actionEdit($id){
+        $model = GoodsCategory::findOne(['id'=>$id]);
+        $request = \Yii::$app->request;
+        if($request->isPost){
+            if($model->validate()){
+                //判断添加顶级分类还是非顶级分类(子分类)
+                if($model->parent_id){
+                    //非顶级分类
+                    $parent = GoodsCategory::findOne(['id'=>$model->parent_id]);
+                    $model->prependTo($parent);
+                }else{
+                    //顶级分类
+                    //修改顶级分类,不改变层级
+                    //判断旧的属性parent_id是否为0,有两种方法,方法一是最普通的方法
+                    //方法一:查询数据表,获取旧的parent_id
+
+                    //方法二:直接过去当前对象的旧属性
+                    if($model->getOldAttribute('parent_id') == 0){
+                        $model->save();//使用save方法是因为保存的是顶级分类,不会影响到数据表里面的左右值
+                    }else{
+                        $model->makeRoot();
+                    }
+                }
+                \Yii::$app->session->setFlash('success','修改成功!');
+                $this->redirect(Url::to(['goods-category/index']));
+            }else{
+                return $model->getErrors();
+            }
+        }
+        return $this->render('add',['model'=>$model]);
     }
 }
