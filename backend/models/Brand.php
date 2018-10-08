@@ -54,4 +54,5 @@ class Brand extends \yii\db\ActiveRecord
             'is_delete' => '状态',
         ];
     }
+
 }

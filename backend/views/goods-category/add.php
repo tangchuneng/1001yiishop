@@ -8,10 +8,10 @@
 $form = \yii\bootstrap\ActiveForm::begin();
 echo $form->field($model,'name')->textInput();
 echo $form->field($model,'parent_id')->hiddenInput();
-//接收zNods数据,转换为json格式
-$categories = json_encode(\backend\models\GoodsCategory::getZNodes());
-//>>>>>>>>>>ztree<<<<<<<<<<<<<//
 
+//>>>>>>>>>>ztree<<<<<<<<<<<<<//
+//接收zNods数据并转换为json格式
+$categories = json_encode(\backend\models\GoodsCategory::getZNodes());
 echo '<ul id="treeDemo" class="ztree"></ul>';
 
 //>>>>>>>>>>ztree<<<<<<<<<<<<<//
@@ -20,11 +20,11 @@ echo $form->field($model,'intro')->textInput();
 echo \yii\bootstrap\Html::submitButton('提交',['class'=>'btn btn-info']);
 \yii\bootstrap\ActiveForm::end();
 
+//>>>>>>>>>>>>>>>>>注册Ztree的静态资源和JS代码<<<<<<<<<<<<<<<<<<<<//
 /**
  * 添加该注释方便编辑器提示
  * @var $this \yii\web\View
  */
-//注册ztree的静态资源和JS代码
 //注册CSS文件
 //$this->registerCssFile('@web/ztree/css/demo.css');//边框资源
 $this->registerCssFile('@web/ztree/css/zTreeStyle/zTreeStyle.css');
@@ -61,5 +61,4 @@ $this->registerJs(new \yii\web\JsExpression(
         var node = zTreeObj.getNodeByParam("id","{$model->parent_id}",null);
         zTreeObj.selectNode(node);
 JS
-
 ));

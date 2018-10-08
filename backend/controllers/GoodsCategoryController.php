@@ -26,7 +26,7 @@ class GoodsCategoryController extends \yii\web\Controller
                 //判断是顶级分类还是非顶级分类(子分类)
                 if($model->parent_id){
                     //添加子分类
-                    $parent = GoodsCategory::findOne(['id'=>1]);
+                    $parent = GoodsCategory::findOne(['id'=>$model->parent_id]);
                     $model->prependTo($parent);
                     echo '操作成功';
                 }else{
@@ -73,14 +73,20 @@ class GoodsCategoryController extends \yii\web\Controller
     }
 
     //删除
-    public function actionDel($id){
-        //$id = \Yii::$app->request->post('id');
+    public function actionDel(){
+        $id = \Yii::$app->request->post('id');
         $model = GoodsCategory::findOne(['id'=>$id]);
-
-        //判断是否是叶子节点(是否有子节点)
-        if($model->isLeaf()){
-            //删除当前节点及其子节点
-            $model->deleteWithChildren();
+        //判断是否有着天数据
+        if($model){
+            //判断是否有子节点
+            if($model->isLeaf()){  //判断是否是叶子节点(是否有子节点)
+                //无子节点,直接删除
+                $model->deleteWithChildren();
+                return 'success';
+            }else{
+                //有子节点:在js中提示用户有子节点不能删除
+                return 'fail';
+            }
         }
     }
 
@@ -89,6 +95,7 @@ class GoodsCategoryController extends \yii\web\Controller
         $model = GoodsCategory::findOne(['id'=>$id]);
         $request = \Yii::$app->request;
         if($request->isPost){
+            $model->load($request->post());
             if($model->validate()){
                 //判断添加顶级分类还是非顶级分类(子分类)
                 if($model->parent_id){
@@ -107,10 +114,12 @@ class GoodsCategoryController extends \yii\web\Controller
                     }else{
                         $model->makeRoot();
                     }
+                    //$model->makeRoot();
                 }
                 \Yii::$app->session->setFlash('success','修改成功!');
-                $this->redirect(Url::to(['goods-category/index']));
+                return $this->redirect(Url::to(['goods-category/index']));
             }else{
+                //验证失败
                 return $model->getErrors();
             }
         }

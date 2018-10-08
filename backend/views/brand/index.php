@@ -28,11 +28,11 @@
         <td>
             <!--原始的修改方法-->
             <a href="<?= \yii\helpers\Url::to(['brand/edit','id'=>$model->id]) ?>" class="btn btn-default exit_btn">
-                <span class="glyphicon glyphicon-pencil"></span>
+                <span class="glyphicon glyphicon-pencil">修改</span>
             </a>
             <!--使用ajax删除-->
             <a href="javascript:;" class="btn btn-default del_btn">
-                <span class="glyphicon glyphicon-trash"></span>
+                <span class="glyphicon glyphicon-trash">删除</span>
             </a>
         </td>
     </tr>
@@ -62,4 +62,4 @@ $del_url = \yii\helpers\Url::to(['brand/del']);//保存ajax需要请求的地址
       }
     });
 JS
-    ));
+));
