@@ -61,21 +61,10 @@ echo '<p class="help-block help-block-error"></p>';
 //>>>>>>>>>>>>>>>>ztree显示商品分类,结束<<<<<<<<<<<//
 
 //获取品牌分类数据并显示
-//echo $form->field($model,'brand_id')->hiddenInput();
-$brand_list = \backend\models\Brand::find()->select(['name'])->all();
-?>
-<div class="form-group field-gooods-shop_price required">
-    <label class="control-label" for="goods-brand_id">品牌分类</label>
-    <select id="goods-brand_id" class="form-control" name="Goods[brand_id]" aria-required="true" aria-invalid="true">
-        <option>=请选择品牌=</option>
-        <?php foreach ($brand_list as $brand):?>
-        <option value="<?= $brand['id']?>"><?= $brand['name']?></option>
-        <?php endforeach;?>
-    </select>
-    <p class="help-block help-block-error"></p>
-</div>
-
-<?php
+$brand_list = \backend\models\Brand::getAll();
+echo $form->field($model,'brand_id')->dropDownList(
+    $brand_list, ['prompt'=>'=请选择品牌=','style'=>'width:300px']
+);
 echo $form->field($model,'market_price')->textInput();
 echo $form->field($model,'shop_price')->textInput();
 echo $form->field($model,'stock')->textInput();

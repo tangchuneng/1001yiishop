@@ -1,44 +1,41 @@
 <?php
 /* @var $this yii\web\View */
 ?>
-    <a href="<?= \yii\helpers\Url::to(['user/add'])?>" class="btn btn-info">添加用户</a>
+    <a href="<?= \yii\helpers\Url::to(['menu/add'])?>" class="btn btn-info">添加菜单</a>
     <table class="table table-bordered table-responsive">
         <tr>
-            <th>ID</th>
-            <th>用户名</th>
-            <th>邮箱</th>
-            <th>最后登录时间</th>
-            <th>状态</th>
+            <th>id</th>
+            <th>名称</th>
+            <th>地址/路由</th>
+            <th>排序</th>
             <th>操作</th>
         </tr>
-        <?php foreach ($model as $user):?>
-            <tr data-id="<?= $user->id?>">
-                <td><?= $user->id?></td>
-                <td><?= $user->username ?></td>
-                <td><?= $user->email ?></td>
-                <td>
-                    <?= $user->last_login_time?date('Y-m-d H:m:s',$user->last_login_time) : '暂无' ?>
-                </td>
-                <td><?= $user->status?'启用':'禁用' ?></td>
+        <?php foreach ($model as $menu):?>
+            <tr>
+                <td><?= $menu->id?></td>
+                <td><?= $menu->name?></td>
+                <td><?= $menu->url?></td>
+                <td><?= $menu->sort?></td>
                 <td>
                     <!--原始的修改方法-->
-                    <a href="<?= \yii\helpers\Url::to(['user/edit','id'=>$user->id]) ?>" class="btn btn-default exit_btn">
+                    <a href="<?= \yii\helpers\Url::to(['menu/edit','name'=>$menu->id]) ?>" class="btn btn-default exit_btn">
                         <span class="glyphicon glyphicon-pencil">修改</span>
                     </a>
                     <!--使用ajax删除-->
                     <a href="javascript:;" class="btn btn-default del_btn">
                         <span class="glyphicon glyphicon-trash">删除</span>
-                    </a>
                 </td>
             </tr>
         <?php endforeach;?>
     </table>
-    <a href="<?= \yii\helpers\Url::to(['user/add'])?>" class="btn btn-info">添加用户</a>
+    <a href="<?= \yii\helpers\Url::to(['menu/add'])?>" class="btn btn-info">添加菜单</a>
+
 <?php
+//>>>>>>>>>>>>>>>>>>使用ajax删除<<<<<<<<<<<<<<<<<<<<<//
 /**
  * @var $this \yii\web\View
  */
-$del_url = \yii\helpers\Url::to(['user/del']);//保存ajax需要请求的地址
+$del_url = \yii\helpers\Url::to(['menu/del']);//保存ajax需要请求的地址
 //注册JS代码:其实就是通过 JsExpression 类返回一个 heredoc 字符串,该字符串中是需要执行的JS代码
 $this->registerJs(new \yii\web\JsExpression(
     <<<JS

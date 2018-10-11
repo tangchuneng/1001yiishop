@@ -55,4 +55,14 @@ class Brand extends \yii\db\ActiveRecord
         ];
     }
 
+    //>>静态的获取所有数据的方法
+    public static function getAll(){
+        $brands = Brand::find()->asArray()->all();
+        $brand_list = [];
+        foreach ($brands as $brand){
+            $brand_list[$brand['id']] = $brand['name'];
+        }
+        //返回重新排列好的数组
+        return $brand_list;
+    }
 }
