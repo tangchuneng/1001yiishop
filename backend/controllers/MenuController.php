@@ -30,4 +30,11 @@ class MenuController extends \yii\web\Controller
 
         return $this->render('add',['model'=>$model]);
     }
+
+    //>>删除菜单
+    public function actionDel($id){
+        $model = Menu::findOne(['id'=>$id]);
+
+        return $this->render('add',['model'=>$model]);
+    }
 }

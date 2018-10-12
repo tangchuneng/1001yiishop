@@ -49,7 +49,7 @@ class Brand extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => '品牌名称',
             'intro' => '品牌简介',
-            'logo' => 'logo',
+            'logo' => 'LOGO',
             'sort' => '排序',
             'is_delete' => '状态',
         ];

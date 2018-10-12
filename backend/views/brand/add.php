@@ -16,8 +16,8 @@ echo \flyok666\uploadifive\Uploadifive::widget([
     'renderTag' => false,
     'jsOptions' => [
         'formData'=>['someKey' => 'someValue'],
-        'width' => 120,
-        'height' => 40,
+        'width' => 100,
+        'height' => 30,
         'onError' => new JsExpression(<<<EOF
 function(file, errorCode, errorMsg, errorString) {
     console.log('The file ' + file.name + ' could not be uploaded: ' + errorString + errorCode + errorMsg);
@@ -44,7 +44,7 @@ EOF
 //>>>>>>>>>>>>>>>>uploadifive结束
 
 //回显上传后的图片,增加用户体验
-echo \yii\bootstrap\Html::img($model->logo,['id'=>'img','height'=>100]);
+echo \yii\bootstrap\Html::img($model->logo,['id'=>'img','height'=>80]);
 echo $form->field($model,'sort')->textInput();
 echo $form->field($model,'is_delete')->radioList(['隐藏','正常']);
 echo \yii\bootstrap\Html::submitButton('提交',['class'=>'btn btn-info']);

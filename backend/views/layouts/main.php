@@ -36,16 +36,23 @@ AppAsset::register($this);
         ],
     ]);
     //定义菜单列表
-    $menuItems = [
-        ['label' => '首页', 'url' => ['site/index']],
-        ['label' => '用户管理','items'=>[
-            ['label' => '用户列表', 'url' => ['user/index']],
-            ['label' => '添加用户', 'url' => ['user/add']],
-        ]]
-    ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => '登录', 'url' => ['user/login']];
+        $menuItems = [['label' => '登录', 'url' => ['user/login']]];
     } else {
+        //写死了的菜单
+        /*$menuItems = [
+            ['label' => '用户管理','items'=>[
+                ['label' => '用户列表', 'url' => ['user/index']],
+                ['label' => '添加用户', 'url' => ['user/add']],
+            ]],
+            ['label' => '商品管理','items'=>[
+                ['label' => '商品列表', 'url' => ['goods/index']],
+                ['label' => '添加商品', 'url' => ['goods/add']],
+            ]]
+        ];*/
+        //根据用户权限动态获取菜单
+        $menuItems = Yii::$app->user->identity->getMenus();
+
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(

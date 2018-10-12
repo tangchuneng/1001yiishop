@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\filters\RbacFilter;
 use backend\models\Brand;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
@@ -77,18 +78,9 @@ class BrandController extends \yii\web\Controller
         //var_dump($model);exit;
         $request = \Yii::$app->request;
         if($request->isPost){
-            $model->update($request->post());
-            //处理上传的文件,实例化上传对象
-            $model->file = UploadedFile::getInstance($model,'file');
-            //var_dump($model->file);exit;
+            $model->load($request->post());
             //验证
             if($model->validate()){
-                //移动文件
-                $file_name = '/upload/'.uniqid().'.'.$model->file->getExtension();
-                $model->file->saveAs(\Yii::getAlias('@webroot').$file_name,false);
-                //将上传文件的路径赋值给logo字段
-                $model->logo = $file_name;
-
                 $model->save();
                 \Yii::$app->session->setFlash('success','修改成功');
                 return $this->redirect(Url::to(['brand/index']));
@@ -97,7 +89,7 @@ class BrandController extends \yii\web\Controller
                 return $model->getErrors();
             }
         }
-        return $this->render('edit',['model'=>$model]);
+        return $this->render('add',['model'=>$model]);
     }
 
     //删除
@@ -106,7 +98,7 @@ class BrandController extends \yii\web\Controller
         $model = Brand::findOne(['id'=>$id]);
         if($model){
             $model->is_delete = -1;
-            $model->save(false);
+            $model->save();
             return 'success';
         }
         return 'fail';
@@ -194,5 +186,16 @@ class BrandController extends \yii\web\Controller
         //获取七牛云上文件的url地址
         $url = $qiniu->getLink($key);
         var_dump($url);
+    }
+
+    //>>添加过滤器:当前所有的操作都会经过这个过滤器来操作
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+                //'except'=>['login','logout','captcha','error'],
+            ]
+        ];
     }
 }

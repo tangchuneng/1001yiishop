@@ -8,6 +8,7 @@
 namespace backend\controllers;
 
 use backend\models\RoleForm;
+use backend\models\UserForm;
 use yii\web\Controller;
 use backend\models\PermissionForm;
 
@@ -33,6 +34,7 @@ class RbacController extends Controller{
         }
         return $this->render('permission',['model'=>$model]);
     }
+
     //>>权限列表
     public function actionPermissionIndex(){
         //获取所有权限数据
@@ -128,6 +130,25 @@ class RbacController extends Controller{
         return $this->render('roleIndex',['roles'=>$roles]);
     }
 
+    //>>给用户分配角色
+    public function actionUserRole(){
+        $model = new UserForm();
+        $request = \Yii::$app->request;
+
+        if($request->isPost){
+            $model->load($_POST);
+            //var_dump($model);exit;
+            if($model->validate()){
+                $auth = \Yii::$app->authManager;
+                foreach ($model->roles as $role){
+                    $auth->assign($auth->getRole($role),$model->user);
+                }
+                \Yii::$app->session->setFlash('success','角色分配成功');
+                return $this->redirect(['user/index']);
+            }
+        }
+        return $this->render('userRole',['model'=>$model]);
+    }
 
     //>>练习时候的代码,用作参考
     public function Study(){

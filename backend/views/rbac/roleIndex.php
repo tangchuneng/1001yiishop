@@ -6,7 +6,7 @@
  * Time: 下午 7:19
  */
 ?>
-<a href="<?= \yii\helpers\Url::to(['rbac/add-role'])?>" class="btn btn-info">添加角色</a>
+<!--<a href="<?/*= \yii\helpers\Url::to(['rbac/add-role'])*/?>" class="btn btn-info">添加角色</a>-->
 <table class="table table-bordered table-responsive">
     <tr>
         <th>角色名称</th>
@@ -18,11 +18,11 @@
         <tr>
             <td><?= $role->name?></td>
             <td><?= $role->description?></td>
-            <td><?php
+            <td width="700px"><?php
                 $permissions = \Yii::$app->authManager->getPermissionsByRole($role->name);
                 if($permissions){
                     foreach ($permissions as $permission){
-                        echo "*<small>".$permission->description."</small>";
+                        echo "<small>".$permission->description."</small>";
                         echo "&emsp;";
                     }
                 }else{
@@ -30,7 +30,7 @@
                 }
                 ?>
             </td>
-            <td>
+            <td width="80px">
                 <!--原始的修改方法-->
                 <a href="<?= \yii\helpers\Url::to(['rbac/edit-role','name'=>$role->name]) ?>" class="btn btn-default exit_btn">
                     <span class="glyphicon glyphicon-pencil">修改</span>
@@ -42,7 +42,7 @@
         </tr>
     <?php endforeach;?>
 </table>
-<a href="<?= \yii\helpers\Url::to(['rbac/add-role'])?>" class="btn btn-info">添加角色</a>
+<!--<a href="<?/*= \yii\helpers\Url::to(['rbac/add-role'])*/?>" class="btn btn-info">添加角色</a>-->
 
 <?php
 //>>>>>>>>>>>>>>>>>>使用ajax删除<<<<<<<<<<<<<<<<<<<<<//

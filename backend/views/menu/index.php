@@ -16,7 +16,7 @@
                 <td><?= $menu->name?></td>
                 <td><?= $menu->url?></td>
                 <td><?= $menu->sort?></td>
-                <td>
+                <td width="200">
                     <!--原始的修改方法-->
                     <a href="<?= \yii\helpers\Url::to(['menu/edit','name'=>$menu->id]) ?>" class="btn btn-default exit_btn">
                         <span class="glyphicon glyphicon-pencil">修改</span>

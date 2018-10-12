@@ -1,28 +1,27 @@
 <?php
 /* @var $this yii\web\View */
 ?>
-    <!--<a href="<?/*= \yii\helpers\Url::to(['user/add'])*/?>" class="btn btn-info">添加用户</a>-->
     <table class="table table-bordered table-responsive">
         <tr>
             <th>ID</th>
-            <th>用户名</th>
-            <th>邮箱</th>
-            <th>最后登录时间</th>
+            <th>名称</th>
+            <th>简介</th>
+            <th>logo</th>
+            <th>排序</th>
             <th>状态</th>
-            <th width="200px">操作</th>
+            <th>操作</th>
         </tr>
-        <?php foreach ($model as $user):?>
-            <tr data-id="<?= $user->id?>">
-                <td><?= $user->id?></td>
-                <td><?= $user->username ?></td>
-                <td><?= $user->email ?></td>
-                <td>
-                    <?= $user->last_login_time?date('Y-m-d H:m:s',$user->last_login_time) : '暂无' ?>
-                </td>
-                <td><?= $user->status?'启用':'禁用' ?></td>
+        <?php foreach ($models as $model):?>
+            <tr data-id="<?= $model->id?>">
+                <td><?= $model->id?></td>
+                <td><?= $model->name ?></td>
+                <td><?= $model->intro ?></td>
+                <td><img src="<?= $model->logo?>" height="50" /> </td>
+                <td><?= $model->sort ?></td>
+                <td><?= $model->is_delete ?></td>
                 <td>
                     <!--原始的修改方法-->
-                    <a href="<?= \yii\helpers\Url::to(['user/edit','id'=>$user->id]) ?>" class="btn btn-default exit_btn">
+                    <a href="<?= \yii\helpers\Url::to(['brand/edit','id'=>$model->id]) ?>" class="btn btn-default exit_btn">
                         <span class="glyphicon glyphicon-pencil">修改</span>
                     </a>
                     <!--使用ajax删除-->
@@ -33,12 +32,12 @@
             </tr>
         <?php endforeach;?>
     </table>
-    <!--<a href="<?/*= \yii\helpers\Url::to(['user/add'])*/?>" class="btn btn-info">添加用户</a>-->
+    <!--<a href="<?/*= \yii\helpers\Url::to(['brand/add'])*/?>" class="btn btn-info">添加品牌</a>-->
 <?php
 /**
  * @var $this \yii\web\View
  */
-$del_url = \yii\helpers\Url::to(['user/del']);//保存ajax需要请求的地址
+$del_url = \yii\helpers\Url::to(['brand/del']);//保存ajax需要请求的地址
 //注册JS代码:其实就是通过 JsExpression 类返回一个 heredoc 字符串,该字符串中是需要执行的JS代码
 $this->registerJs(new \yii\web\JsExpression(
     <<<JS

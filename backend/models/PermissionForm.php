@@ -38,4 +38,23 @@ class PermissionForm extends Model{
         }
     }
 
+    //>>静态获取所有权限数据
+    public static function getPermissionItem(){
+        $permissions = \Yii::$app->authManager->getPermissions();
+        $item = [];
+        foreach ($permissions as $permission){
+            $item[$permission->name] = $permission->description;
+        }
+        return $item;
+    }
+
+    //>>静态获取所有路由
+    public static function getUrl(){
+        $permissions = \Yii::$app->authManager->getPermissions();
+        $url_list = [];
+        foreach ($permissions as $permission){
+            $url_list[$permission->name] = $permission->name;
+        }
+        return $url_list;
+    }
 }

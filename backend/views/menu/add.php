@@ -6,7 +6,7 @@
  * Time: 下午 8:05
  */
 $menu_list = \backend\models\Menu::getAll();
-$url_list = [];
+$url_list = \backend\models\PermissionForm::getUrl();
 $form = \yii\bootstrap\ActiveForm::begin();
 echo $form->field($model,'name')->textInput();
 echo $form->field($model,'parent_id')->dropDownList(

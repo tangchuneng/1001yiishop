@@ -26,6 +26,8 @@ return [
         ],
         'user' => [
             'identityClass' => 'backend\models\User',
+            //设置用户登录地址
+            'loginUrl' => ['user/login'],
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],

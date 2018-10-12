@@ -62,12 +62,12 @@ class RoleForm extends Model{
         }
     }
 
-    //>>静态获取所有权限数据
-    public static function getPermissionItem(){
-        $permissions = \Yii::$app->authManager->getPermissions();
+    //>>静态获取所有角色数据
+    public static function getRolesItem(){
+        $Roles = \Yii::$app->authManager->getRoles();
         $item = [];
-        foreach ($permissions as $permission){
-            $item[$permission->name] = $permission->description;
+        foreach ($Roles as $Role){
+            $item[$Role->name] = $Role->name;
         }
         return $item;
     }

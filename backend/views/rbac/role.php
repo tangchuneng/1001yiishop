@@ -8,6 +8,6 @@
 $form = \yii\bootstrap\ActiveForm::begin();
 echo $form->field($model,'name')->textInput();
 echo $form->field($model,'description')->textInput();
-echo $form->field($model,'permissions')->inline(true)->checkboxList(\backend\models\RoleForm::getPermissionItem());
+echo $form->field($model,'permissions')->inline(true)->checkboxList(\backend\models\PermissionForm::getPermissionItem());
 echo \yii\bootstrap\Html::submitButton('提交',['class'=>'btn btn-info']);
 \yii\bootstrap\ActiveForm::end();

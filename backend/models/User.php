@@ -43,7 +43,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'email','status'], 'required'],
+            [['username', 'email','status','password','captcha'], 'required'],
             //on 指定场景,该规则只在该场景下生效
             ['password','required','on'=>[self::SCENARIO_ADD,self::SCENARIO_LOGIN]],
             [['status', 'created_at', 'updated_at'], 'integer'],
@@ -199,5 +199,36 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             $this->addError('username','用户不存在');
         }
         return false;
+    }
+
+    //>>静态获取所有用户数据
+    public static function getUsers(){
+        $users = User::find()->all();
+        $items = [];
+        foreach ($users as $user){
+            $items[$user->id] = $user->username;
+        }
+        return $items;
+    }
+
+    //>>根据用户来获取菜单
+    public function getMenus(){
+        $menus = Menu::find()->where(['parent_id'=>0])->all();
+        //var_dump($menus);exit;
+        $menuItems = [];
+        foreach ($menus as $menu){
+            $items = [];
+            $children = Menu::find()->where(['parent_id'=>$menu->id])->all();
+            foreach ($children as $child){
+                //判断当前用户是否有该路由的权限,根据权限生成菜单
+                if(Yii::$app->user->can($child->url)){
+                    $items[] = ['label'=>$child->name,'url'=>[$child->url]];
+                }
+            }
+            $menuItems[] = ['label'=>$menu->name,'items'=>$items];
+        }
+        //var_dump($menuItems);exit;
+
+        return $menuItems;
     }
 }

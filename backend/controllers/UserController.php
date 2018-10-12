@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\filters\RbacFilter;
 use backend\models\PasswordForm;
 use backend\models\User;
 use yii\helpers\Url;
@@ -91,6 +92,7 @@ class UserController extends \yii\web\Controller
     public function actionLogin(){
         //1.显示登录表单
         $model = new User();
+        $model->scenario = User::SCENARIO_LOGIN;
         //2.实例化请求组件
         $request = \Yii::$app->request;
         //3.判断
@@ -154,6 +156,17 @@ class UserController extends \yii\web\Controller
                 'minLength' => '4',//最小长度
                 'maxLength' => '4',//最大长度
                 'backColor' => 0xFFFFFF,//背景色
+            ]
+        ];
+    }
+
+    //>>添加过滤器:当前所有的操作都会经过这个过滤器来操作
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+                'except'=>['login','logout','captcha','error'],//不经过过滤器的方法
             ]
         ];
     }
