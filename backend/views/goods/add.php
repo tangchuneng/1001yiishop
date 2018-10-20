@@ -6,7 +6,6 @@
  * Time: 下午 7:02
  */
 use yii\web\JsExpression;
-use \kucha\ueditor\UEditor;
 
 $form = \yii\bootstrap\ActiveForm::begin();
 echo $form->field($model,'name')->textInput();
@@ -25,30 +24,30 @@ echo \flyok666\uploadifive\Uploadifive::widget([
         'width' => 100,
         'height' => 30,
         'onError' => new JsExpression(<<<EOF
-function(file, errorCode, errorMsg, errorString) {
-    console.log('The file ' + file.name + ' could not be uploaded: ' + errorString + errorCode + errorMsg);
-}
+            function(file, errorCode, errorMsg, errorString) {
+            console.log('The file ' + file.name + ' could not be uploaded: ' + errorString + errorCode + errorMsg);
+        }
 EOF
-        ),
+),
         'onUploadComplete' => new JsExpression(<<<EOF
-function(file, data, response) {
-    data = JSON.parse(data);
-    if (data.error) {
-        console.log(data.msg);
-    } else {
-        console.log(data.fileUrl);
-        //将上传文件的路径写入logo字段的隐藏域
-        $("#gooods-logo").val(data.fileUrl);
-        //回显图片
-        $("#img").attr("src",data.fileUrl);
-    }
-}
+            function(file, data, response) {
+                data = JSON.parse(data);
+                if (data.error) {
+                console.log(data.msg);
+                } else {
+                console.log(data.fileUrl);
+                //将上传文件的路径写入logo字段的隐藏域
+                $("#goods-logo").val(data.fileUrl);
+                //回显图片
+                $("#img").attr("src",data.fileUrl);
+                }
+            }
 EOF
         ),
     ]
 ]);
 
-echo \yii\bootstrap\Html::img($model->logo,['id'=>'img','height'=>100]);//回显上传后的图片,增加用户体验
+echo \yii\bootstrap\Html::img($model->logo,['id'=>'img','height'=>80]);//回显上传后的图片,增加用户体验
 //>>>>>>>>>>>>>>>>uploadifive插件处理上传的logo(Ajax上传,发起ajax请求),结束
 
 //>>>>>>>>>>>>>>>>ztree显示商品分类,开始<<<<<<<<<<<//
@@ -63,7 +62,7 @@ echo '<p class="help-block help-block-error"></p>';
 //获取品牌分类数据并显示
 $brand_list = \backend\models\Brand::getAll();
 echo $form->field($model,'brand_id')->dropDownList(
-    $brand_list, ['prompt'=>'=请选择品牌=','style'=>'width:300px']
+    $brand_list, ['prompt'=>'=请选择品牌=','style'=>'width:220px']
 );
 echo $form->field($model,'market_price')->textInput();
 echo $form->field($model,'shop_price')->textInput();
@@ -72,23 +71,15 @@ echo $form->field($model,'is_on_sale')->inline()->radioList([1=>'在售',0=>'下
 echo $form->field($model,'sort')->textInput();
 
 //>>>>>>>>>>>>>>>>>使用UEditor开始<<<<<<<<<<<<<<<<<<//
+//echo $form->field($goods_gallery,'path')->hiddenInput();
 echo $form->field($goods_intro,'content')->widget('kucha\ueditor\UEditor',[
     'clientOptions' => [
         //编辑区域大小
-        'initialFrameHeight' => '250',
+        'initialFrameHeight' => '350',
         //设置语言
         'lang' =>'zh-cn',//英文为 en
-        ]
-]);
-//编辑器相关配置参考
-/*echo UEditor::widget([
-    'clientOptions' => [
-        //编辑区域大小
-        'initialFrameHeight' => '200',
-        //设置语言
-        'lang' =>'en', //中文为 zh-cn
         //定制菜单
-        'toolbars' => [
+        /*'toolbars' => [
             [
                 'fullscreen', 'source', 'undo', 'redo', '|',
                 'fontsize',
@@ -98,15 +89,13 @@ echo $form->field($goods_intro,'content')->widget('kucha\ueditor\UEditor',[
                 'lineheight', '|',
                 'indent', '|'
             ],
-        ]
+        ]*/
     ]
-]);*/
+]);
 //>>>>>>>>>>>>>>>>>使用UEditor结束<<<<<<<<<<<<<<<<<<//
-
 
 echo \yii\bootstrap\Html::submitButton('提交',['class'=>'btn btn-info']);
 \yii\bootstrap\ActiveForm::end();
-
 
 //>>>>>>>>>>>>>>>>>注册Ztree的静态资源和JS代码<<<<<<<<</<<<<<<<<</
 /**
@@ -134,8 +123,8 @@ $this->registerJs(new \yii\web\JsExpression(
             callback: {//时间回调函数
                 onClick: function(event,treeId,treeNode) {
                   console.log(treeNode);
-                  //获取当前节点的id,写入到 parent_id 的值
-                  $("#goodscategory-parent_id").val(treeNode.id);
+                  //获取当前节点的id,写入到 goods_category_id 的值
+                  $("#goods-goods_category_id").val(treeNode.id);
                 }
             }
         };
@@ -148,11 +137,5 @@ $this->registerJs(new \yii\web\JsExpression(
         //获取你所需要选中的节点
         var node = zTreeObj.getNodeByParam("id","{$category->parent_id}",null);
         zTreeObj.selectNode(node);
-        
-        //将选中分类的id写入到goods_category_id字段的隐藏域
-        //$("#gooods-logo").val(zNodes);
-        
-        //将选中品牌的id写入到brand_id的隐藏域
-        //$("#gooods-brand_id").val($("#Goods[brand_id]"));
 JS
 ));

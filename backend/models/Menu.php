@@ -36,7 +36,6 @@ class Menu extends \yii\db\ActiveRecord
             [['name'], 'unique'],
         ];
     }
-
     /**
      * @inheritdoc
      */

@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\Menu;
+use backend\filters\RbacFilter;
 
 class MenuController extends \yii\web\Controller
 {
@@ -23,18 +24,49 @@ class MenuController extends \yii\web\Controller
                 $model->save();
                 \Yii::$app->session->setFlash('success','添加成功');
                 return $this->redirect(['index']);
-            }else{
-                return $model->getErrors();
             }
         }
 
         return $this->render('add',['model'=>$model]);
     }
 
-    //>>删除菜单
-    public function actionDel($id){
-        $model = Menu::findOne(['id'=>$id]);
-
+    public function actionEdit($id){
+        $model = Menu::findOne($id);
+        $request = \Yii::$app->request;
+        if($request->isPost){
+            $model->load($request->post());
+            if($model->validate()){
+                $model->save();
+                \Yii::$app->session->setFlash('success','修改成功');
+                return $this->redirect(['index']);
+            }
+        }
         return $this->render('add',['model'=>$model]);
+    }
+
+    //>>删除菜单
+    public function actionDel(){
+        $id = \Yii::$app->request->post('id');
+        $model = Menu::findOne(['id'=>$id]);
+        if($model){
+            if(Menu::find()->where(['parent_id'=>$id])->all()){
+                return 'fail';
+            }
+            $model->delete();
+            return 'success';
+        }else{
+            return 'fail';
+        }
+    }
+
+    //>>添加过滤器:当前所有的操作都会经过这个过滤器来操作
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+                //'except'=>['login','logout','captcha','error'],
+            ]
+        ];
     }
 }

@@ -41,7 +41,7 @@ class BrandController extends \yii\web\Controller
                 return $model->getErrors();
             }
         }
-        return $this->render('add',['model'=>$model]);
+        return $this->render('upload',['model'=>$model]);
     }
 
     //添加:使用了 Ajax 上传的方法
@@ -110,8 +110,8 @@ class BrandController extends \yii\web\Controller
         return [
             's-upload' => [
                 'class' => UploadAction::className(),
-                'basePath' => '@webroot/upload',
-                'baseUrl' => '@web/upload',
+                'basePath' => '@webroot/upload/brand',
+                'baseUrl' => '@web/upload/brand',
                 'enableCsrf' => true, //默认true 跨站请求攻击验证
                 'postFieldName' => 'Filedata', // default
 
@@ -130,14 +130,15 @@ class BrandController extends \yii\web\Controller
                 },*/
                 //END CLOSURE BY-HASH
 
-                //格式化文件名3
+                //自定义文件命名格式
                 //BEGIN CLOSURE BY TIME
                 'format' => function (UploadAction $action) {
-                    $fileext = $action->uploadfile->getExtension();
-                    $filehash = sha1(uniqid() . time());
-                    $p1 = substr($filehash, 0, 2);
-                    $p2 = substr($filehash, 2, 2);
-                    return "{$p1}/{$p2}/{$filehash}.{$fileext}";
+                    $fileext = $action->uploadfile->getExtension();//获取文件扩展名
+                    $filehash = date('Ymd',time()) . uniqid();//生成唯一字符串拼接时间戳并进行hash运算
+                    //$p1 = substr($filehash, 0, 2);
+                    //$p2 = substr($filehash, 2, 2);
+                    //return "{$p1}/{$p2}/{$filehash}.{$fileext}";
+                    return 'logo_'.$filehash.'.'.$fileext;// logo + 日期 + 唯一字符串
                 },
                 //END CLOSURE BY TIME
 

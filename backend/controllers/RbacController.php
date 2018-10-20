@@ -17,6 +17,7 @@ class RbacController extends Controller{
     //>>添加权限
     public function actionAddPermission(){
         $model = new PermissionForm();
+        $model->scenario = PermissionForm::SCENARIO_ADD_PERMISSION;
         $request = \Yii::$app->request;
         if($request->isPost){
             $model->load($request->post());
@@ -39,8 +40,45 @@ class RbacController extends Controller{
     public function actionPermissionIndex(){
         //获取所有权限数据
         $permissions = \Yii::$app->authManager->getPermissions();
+
         //分配数据,渲染视图
         return $this->render('permissionIndex',['permissions'=>$permissions]);
+    }
+
+    //>>修改权限
+    public function actionEditPermission($name){
+        $auth = \Yii::$app->authManager;
+        $permission = $auth->getPermission($name);
+        $model = new PermissionForm();
+        $model->name = $permission->name;
+        $model->description = $permission->description;
+        $request = \Yii::$app->request;
+        if($request->isPost){
+            $model->load($request->post());
+            if($model->validate()){
+                if($auth->getPermission($model->name)){
+                    return $model->addError('name','权限已存在');
+                }else{
+                    $permission->name = $model->name;
+                    $permission->description = $model->description;
+                }
+                \Yii::$app->session->setFlash('success','权限修改成功');
+                return $this->redirect('permission-index');
+            }
+        }
+
+        return $this->render('permission',['model'=>$model]);
+    }
+
+    //>>删除权限
+    public function actionDelPermission(){
+        $name = \Yii::$app->request->post(['name']);
+        $permission = \Yii::$app->authManager->getPermission($name);
+        if($permission){
+            \Yii::$app->authManager->remove($permission);
+            return 'success';
+        }
+        return 'fail';
     }
 
     //>>添加角色
@@ -194,4 +232,15 @@ class RbacController extends Controller{
         //取消用户的角色
         $auth->revoke($role1,2);
     }
+
+    //>>添加过滤器:当前所有的操作都会经过这个过滤器来操作
+    /*public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>RbacFilter::className(),
+                //'except'=>['login','logout','captcha','error'],
+            ]
+        ];
+    }*/
 }

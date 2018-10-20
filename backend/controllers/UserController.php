@@ -18,6 +18,7 @@ class UserController extends \yii\web\Controller
         $model = new User();
         $model->scenario = User::SCENARIO_ADD;//指定当前方法的使用场景是SCENARIO_ADD场景.
         $request = \Yii::$app->request;
+        //var_dump($request->getUserIP());exit;
         if($request->isPost){
             $model->load($request->post());
             //var_dump($model);exit;
@@ -47,7 +48,7 @@ class UserController extends \yii\web\Controller
         //ajax是通过post方式传值的,所以需要在post中获取id值
         $id = \Yii::$app->request->post('id');
         //根据id删除数据
-        $model = User::findOne(['id'=>$id]);
+        $model = User::findOne($id);
         if($model->delete()){
             return 'success';
         }
@@ -92,19 +93,20 @@ class UserController extends \yii\web\Controller
     public function actionLogin(){
         //1.显示登录表单
         $model = new User();
-        $model->scenario = User::SCENARIO_LOGIN;
+        $model->scenario = User::SCENARIO_LOGIN;//场景
         //2.实例化请求组件
         $request = \Yii::$app->request;
         //3.判断
         if($request->isPost){
+            //var_dump($request->post());exit;
             $model->load($request->post());
             //手动将是否记住我的选项赋值给$model->remember
             $model->remember = $_POST['User']['remember'];
+            $model->last_login_ip = $request->getUserIP();
             //验证
             if($model->login()){
-                $model->last_login_time = time();
                 \Yii::$app->session->setFlash('success','登录成功');
-                return $this->redirect(['user/index']);
+                return $this->redirect(['goods/index']);
             }
         }
         //渲染视图

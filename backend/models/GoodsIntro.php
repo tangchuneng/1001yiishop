@@ -27,7 +27,7 @@ class GoodsIntro extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['goods_id', 'content'], 'required'],
+            [['content'], 'required'],
             [['goods_id'], 'integer'],
             [['content'], 'string'],
         ];

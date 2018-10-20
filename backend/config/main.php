@@ -16,7 +16,7 @@ return [
     //设置布局文件(false表示关闭)
     //'layout'=>'diy_main',//在这里设置会影响到整个项目
     //修改默认路由
-    'defaultRoute' => 'user/login',//注:如果控制器后面是index,可以省略不写
+    'defaultRoute' => 'goods/index',//注:如果控制器后面是index,可以省略不写
 
     'bootstrap' => ['log'],
     'modules' => [],

@@ -29,8 +29,8 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'MyShop后台管理',
-        'brandUrl' => Yii::$app->homeUrl,
+        'brandLabel' => '【京西商城】后台管理',
+        'brandUrl' => \yii\helpers\Url::to(['goods/index']),//默认 Yii::$app->homeUrl
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],

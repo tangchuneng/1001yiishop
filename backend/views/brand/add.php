@@ -2,7 +2,7 @@
 use yii\web\JsExpression;
 $form = \yii\bootstrap\ActiveForm::begin();
 echo $form->field($model,'name')->textInput();
-echo $form->field($model,'intro')->textarea();
+echo $form->field($model,'intro')->textarea(['style'=>'height:100px']);
 //使用了ajax上传过后,就将传过来的文件名保存到这个隐藏域中,表单提交的时候就提交到控制器中
 echo $form->field($model,'logo')->hiddenInput();
 
@@ -46,6 +46,6 @@ EOF
 //回显上传后的图片,增加用户体验
 echo \yii\bootstrap\Html::img($model->logo,['id'=>'img','height'=>80]);
 echo $form->field($model,'sort')->textInput();
-echo $form->field($model,'is_delete')->radioList(['隐藏','正常']);
+echo $form->field($model,'is_delete')->inline()->radioList(['隐藏','正常']);
 echo \yii\bootstrap\Html::submitButton('提交',['class'=>'btn btn-info']);
 \yii\bootstrap\ActiveForm::end();

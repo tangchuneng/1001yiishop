@@ -6,7 +6,46 @@
  * Time: 下午 7:19
  */
 ?>
-<a href="<?= \yii\helpers\Url::to(['rbac/add-permission'])?>" class="btn btn-info">添加权限</a>
+<!--第一步：引入Javascript / CSS （CDN）-->
+<!-- DataTables CSS -->
+<!--<link rel="stylesheet" type="text/css" href="DataTables-1.10.15/media/css/jquery.dataTables.css">-->
+<?=\yii\helpers\Html::jsFile('@web/DataTables-1.10.15/media/js/jquery.js')?>
+
+<!-- jQuery -->
+<!--<script type="text/javascript" charset="utf8" src="DataTables-1.10.15/media/js/jquery.js"></script>-->
+<?=\yii\helpers\Html::jsFile('@web/DataTables-1.10.15/media/js/jquery.dataTables.js')?>
+
+<!-- DataTables -->
+<!--<script type="text/javascript" charset="utf8" src="DataTables-1.10.15/media/js/jquery.dataTables.js"></script>-->
+<?=\yii\helpers\Html::cssFile('@web/DataTables-1.10.15/media/css/jquery.dataTables.css')?>
+
+<!--第二步：添加如下 HTML 代码-->
+<!--<table id="table_id_example" class="display">
+    <thead>
+    <tr>
+        <th>Column 1</th>
+        <th>Column 2</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Row 1 Data 1</td>
+        <td>Row 1 Data 2</td>
+    </tr>
+    <tr>
+        <td>Row 2 Data 1</td>
+        <td>Row 2 Data 2</td>
+    </tr>
+    </tbody>
+</table>-->
+
+<!--第三步：初始化DataTables-->
+<!--$(document).ready( function () {
+$('#table_id_example').DataTable();
+} );-->
+
+    <h3>权限列表</h3>
+<!--<a href="--><?//= \yii\helpers\Url::to(['rbac/add-permission'])?><!--" class="btn btn-info">添加权限</a>-->
 <table class="table table-bordered table-responsive">
     <tr>
         <th>权限名称</th>
@@ -14,29 +53,28 @@
         <th>操作</th>
     </tr>
     <?php foreach ($permissions as $permission):?>
-        <tr>
+        <tr data-id="<?= $permission->name?>">
             <td><?= $permission->name?></td>
             <td><?= $permission->description?></td>
             <td>
                 <!--原始的修改方法-->
-                <a href="<?= \yii\helpers\Url::to(['rbac/edit','name'=>$permission->name]) ?>" class="btn btn-default exit_btn">
+                <a href="<?= \yii\helpers\Url::to(['rbac/edit-permission','name'=>$permission->name]) ?>" class="btn btn-warning exit_btn">
                     <span class="glyphicon glyphicon-pencil">修改</span>
                 </a>
                 <!--使用ajax删除-->
-                <a href="javascript:;" class="btn btn-default del_btn">
+                <a href="javascript:;" class="btn btn-danger del_btn">
                     <span class="glyphicon glyphicon-trash">删除</span>
             </td>
         </tr>
     <?php endforeach;?>
 </table>
-<a href="<?= \yii\helpers\Url::to(['rbac/add-permission'])?>" class="btn btn-info">添加权限</a>
 
 <?php
 //>>>>>>>>>>>>>>>>>>使用ajax删除<<<<<<<<<<<<<<<<<<<<<//
 /**
  * @var $this \yii\web\View
  */
-$del_url = \yii\helpers\Url::to(['rbac/del-$permission']);//保存ajax需要请求的地址
+$del_url = \yii\helpers\Url::to(['rbac/del-permission']);//保存ajax需要请求的地址
 //注册JS代码:其实就是通过 JsExpression 类返回一个 heredoc 字符串,该字符串中是需要执行的JS代码
 $this->registerJs(new \yii\web\JsExpression(
     <<<JS

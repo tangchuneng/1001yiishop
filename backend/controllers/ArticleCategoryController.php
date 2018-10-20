@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use app\models\ArticleCategory;
+use backend\models\ArticleCategory;
 use yii\helpers\Url;
 use backend\filters\RbacFilter;
 class ArticleCategoryController extends \yii\web\Controller

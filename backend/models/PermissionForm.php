@@ -13,19 +13,20 @@ class PermissionForm extends Model{
     public $name;//权限名称
     public $description;//权限描述
 
+    const SCENARIO_ADD_PERMISSION = 'addPermission';
     public function rules()
     {
         return [
             [['name','description'],'required'],
             //自定义验证规则
-            ['name','validateName'],
+            ['name','validateName','on'=>self::SCENARIO_ADD_PERMISSION],
         ];
     }
     //>>字段标签
     public function attributeLabels()
     {
         return [
-          'name'=>'权限名称',
+          'name'=>'权限名称(路由)',
           'description'=>'权限描述',
         ];
     }

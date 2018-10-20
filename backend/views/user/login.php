@@ -6,8 +6,8 @@
  * Time: 下午 12:13
  */
 $form = \yii\bootstrap\ActiveForm::begin();
-echo $form->field($model,'username')->textInput();
-echo $form->field($model,'password')->passwordInput();
+echo $form->field($model,'username')->textInput(['style'=>'width:300px']);
+echo $form->field($model,'password')->passwordInput(['style'=>'width:300px']);
 echo $form->field($model,'remember')->checkbox();
 echo $form->field($model,'captcha')->widget(\yii\captcha\Captcha::className(),[
     'captchaAction'=>'user/captcha',//修改为自定义的验证码显示规则

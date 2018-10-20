@@ -1,6 +1,7 @@
 <?php
 /* @var $this yii\web\View */
 ?>
+    <h3>用户列表</h3>
     <!--<a href="<?/*= \yii\helpers\Url::to(['user/add'])*/?>" class="btn btn-info">添加用户</a>-->
     <table class="table table-bordered table-responsive">
         <tr>

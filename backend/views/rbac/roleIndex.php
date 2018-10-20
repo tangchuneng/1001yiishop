@@ -6,6 +6,7 @@
  * Time: 下午 7:19
  */
 ?>
+    <h3>角色列表</h3>
 <!--<a href="<?/*= \yii\helpers\Url::to(['rbac/add-role'])*/?>" class="btn btn-info">添加角色</a>-->
 <table class="table table-bordered table-responsive">
     <tr>

@@ -3,16 +3,16 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `gooods`.
+ * Handles the creation of table `goods`.
  */
-class m181007_085840_create_gooods_table extends Migration
+class m181007_085840_create_goods_table extends Migration
 {
     /**
      * @inheritdoc
      */
     public function up()
     {
-        $this->createTable('gooods', [
+        $this->createTable('goods', [
             'id' => $this->primaryKey(),
             'name' => $this->string(20)->notNull()->comment('商品名称'),
             'sn' => $this->string(20)->notNull()->comment('货号'),
@@ -35,6 +35,6 @@ class m181007_085840_create_gooods_table extends Migration
      */
     public function down()
     {
-        $this->dropTable('gooods');
+        $this->dropTable('goods');
     }
 }

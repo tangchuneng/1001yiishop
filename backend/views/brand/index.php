@@ -6,6 +6,7 @@
  * Time: 下午 5:37
  */
 ?>
+    <h3>品牌列表</h3>
 <!--<a href="<?/*= \yii\helpers\Url::to(['brand/add'])*/?>" class="btn btn-info">添加品牌</a>-->
 <table class="table table-bordered table-responsive">
     <tr>
@@ -13,7 +14,6 @@
         <th>名称</th>
         <th>简介</th>
         <th>logo</th>
-        <th>排序</th>
         <th>状态</th>
         <th>操作</th>
     </tr>
@@ -23,7 +23,6 @@
         <td><?= $model->name ?></td>
         <td><?= $model->intro ?></td>
         <td><img src="<?= $model->logo?>" height="50" /> </td>
-        <td><?= $model->sort ?></td>
         <td><?= $model->is_delete ?></td>
         <td>
             <!--原始的修改方法-->
@@ -45,8 +44,8 @@
  */
 $del_url = \yii\helpers\Url::to(['brand/del']);//保存ajax需要请求的地址
 //注册JS代码:其实就是通过 JsExpression 类返回一个 heredoc 字符串,该字符串中是需要执行的JS代码
-    $this->registerJs(new \yii\web\JsExpression(
-            <<<JS
+$this->registerJs(new \yii\web\JsExpression(
+    <<<JS
     $(".del_btn").click(function(){
       if(confirm('确认删除吗?')){
           var tr = $(this).closest('tr');

@@ -43,7 +43,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'email','status','password','captcha'], 'required'],
+            [['username', 'email','status','password',/*'captcha'*/], 'required'],
             //on 指定场景,该规则只在该场景下生效
             ['password','required','on'=>[self::SCENARIO_ADD,self::SCENARIO_LOGIN]],
             [['status', 'created_at', 'updated_at'], 'integer'],
@@ -51,7 +51,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['auth_key'], 'string', 'max' => 32],
             [['password'], 'string'],
             [['username'], 'unique'],
-            [['email'], 'unique'],
+            [['email','username'], 'unique'],
             [['password_reset_token'], 'unique'],
             //验证验证码,必须加上验证的场景
             ['captcha','captcha','captchaAction'=>'user/captcha','on'=>self::SCENARIO_LOGIN],
@@ -169,19 +169,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     //在模型中进行登录验证
     public function login(){
-        //密码加密(添加用户的时候使用,使用security组件自动生成动态的hash密码)
-        //$passord_hash = \Yii::$app->security->generatePasswordHash($this->password);
-
         $user = User::findOne(['username'=>$this->username]);
-        //var_dump($this->remember);exit;
         //验证用户
         if($user){
             //用户存在,验证密码(调用Yii的security组件验证)
             if(\Yii::$app->security->validatePassword($this->password,$user->password_hash)){
-                //保存最后登录时间和登录IP
-                //$user->last_login_ip = 'ip';//以后完善
+                //保存最后登录时间和IP
                 $user->last_login_time = time();
-                $user->save();
+                $user->last_login_ip = $this->last_login_ip;
+                $user->save(false);
                 //密码正确,登录用户
                 if($this->remember){
                     //如果勾选了记住我就登录用户并保存7天
@@ -190,15 +186,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 return \Yii::$app->user->login($user);
             }else{
                 //密码不正确
-                //echo '密码错误!';exit;
-                $this->addError('password','密码不正确');
+                return $this->addError('password','密码不正确');
             }
-        }else{
-            //用户不存在
-            //echo '用户不存在!';exit;
-            $this->addError('username','用户不存在');
         }
-        return false;
+        //用户不存在
+        return $this->addError('username','用户不存在');
     }
 
     //>>静态获取所有用户数据
@@ -211,14 +203,51 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $items;
     }
 
-    //>>根据用户来获取菜单
+    //>>根据用户来获取顶级菜单和对应的子菜单
     public function getMenus(){
+        //获取该用户所有的权限
+        $permissions = Yii::$app->authManager->getPermissionsByUser(Yii::$app->user->getId());
+
+        $children = [];//保存该有用户所拥有的子菜单
+        //根据该用户的权限获取所有的二级菜单
+        foreach ($permissions as $permission){
+            if(Menu::findOne(['url'=>$permission->name])){
+                $children[] = Menu::findOne(['url'=>$permission->name]);
+            }
+        }
+        //var_dump($children);exit;
+
+        //根据子菜单找到所有的父菜单
+        $parent_id = [];
+        foreach ($children as $child){
+            $parent_id[] = $child->parent_id;
+        }
+        $parent_id = array_unique($parent_id);
+        //var_dump($parent_id);exit;
+
+        $menuItems = [];
+        foreach ($parent_id as $parent){
+            $items = [];
+            $children = Menu::find()->where(['parent_id'=>$parent])->all();
+            //var_dump($children);exit;
+            foreach ($children as $child){
+                //判断当前用户是否有该路由的权限,根据权限生成菜单
+                if(Yii::$app->user->can($child->url)){
+                    $items[] = ['label'=>$child->name,'url'=>[$child->url]];
+                }
+            }
+            $menuItems[] = ['label'=>Menu::findOne(['id'=>$parent])->name,'items'=>$items];
+        }
+        return $menuItems;
+    }
+    //>>获取所有的顶级菜单和根据用户的权限来获取子菜单
+    public function getMenuss(){
         $menus = Menu::find()->where(['parent_id'=>0])->all();
-        //var_dump($menus);exit;
         $menuItems = [];
         foreach ($menus as $menu){
             $items = [];
             $children = Menu::find()->where(['parent_id'=>$menu->id])->all();
+            //var_dump($children);exit;
             foreach ($children as $child){
                 //判断当前用户是否有该路由的权限,根据权限生成菜单
                 if(Yii::$app->user->can($child->url)){
@@ -227,8 +256,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             }
             $menuItems[] = ['label'=>$menu->name,'items'=>$items];
         }
-        //var_dump($menuItems);exit;
-
         return $menuItems;
     }
 }

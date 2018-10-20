@@ -47,7 +47,7 @@ class Article extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => '名称',
             'intro' => '简介',
-            'article_category_id' => '文章分类id',
+            'article_category_id' => '文章分类',
             'sort' => '排序',
             'is_delete' => '状态',
             'create_time' => '创建时间',
