@@ -14,7 +14,7 @@ echo $form->field($model,'article_category_id')->dropDownList(
     \backend\models\ArticleCategory::getCategories(),['prompt'=>'=请选择文章分类=']
 );
 echo $form->field($model,'sort')->textInput();
-echo $form->field($model,'is_delete')->inline()->radioList([1=>'正常',0=>'隐藏']);
+echo $form->field($model,'is_delete')->inline()->radioList(['正常','隐藏']);
 
 //>>>>>>>>>>>>>>>>>使用UEditor开始<<<<<<<<<<<<<<<<<<//
 echo $form->field($detail,'content')->widget('kucha\ueditor\UEditor',[

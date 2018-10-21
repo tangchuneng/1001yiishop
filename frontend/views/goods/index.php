@@ -25,7 +25,7 @@
         <div class="topnav_right fr">
             <ul>
                 <li>您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>]
-                    [<a href="<?=\yii\helpers\Url::to(['member/login'])?>">免费注册</a>]
+                    [<a href="<?=\yii\helpers\Url::to(['member/regist'])?>">免费注册</a>]
                 </li>
                 <li class="line">|</li>
                 <li>我的订单</li>
@@ -83,7 +83,7 @@
                         <ul class="list1 fl">
                             <li><a href="">用户信息></a></li>
                             <li><a href="">我的订单></a></li>
-                            <li><a href="">收货地址></a></li>
+                            <li><a href="<?=\yii\helpers\Url::to(['member/address'])?>">收货地址></a></li>
                             <li><a href="">我的收藏></a></li>
                         </ul>
 

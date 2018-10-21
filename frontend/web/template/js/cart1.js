@@ -70,11 +70,13 @@ var changeCart = function (goods_id,amount) {
     })
 }
 //删除购物车商品
-$(".del_cart").click(function(){
+function delCart(a){
     if(confirm('确认删除吗?')){
-        var tr = $(this).closest('tr');
+        var tr = $(a).closest('tr');
         var id = tr.attr("data-id");
+        //console.log(id);
         $.post("del-cart",{id:id},function(data){
+            console.log(data);
             if(data == 'success'){
                 alert('删除成功');
                 tr.hide('slow');
@@ -83,4 +85,4 @@ $(".del_cart").click(function(){
             }
         });
     }
-});
+}

@@ -1,8 +1,9 @@
 <?php
-
 namespace frontend\controllers;
 
 use backend\models\GoodsCategory;
+use frontend\models\Address;
+use frontend\models\Locations;
 use frontend\models\Member;
 use frontend\models\SmsDemo;
 use Yii;
@@ -70,12 +71,113 @@ class MemberController extends \yii\web\Controller
         $model = Member::findOne(['id'=>$id]);
     }
 
+    //>>收货地址页面
+    public function actionAddress(){
+        $addresses = Address::find()->where(['member_id'=>Yii::$app->user->id])->all();
+
+        return $this->renderPartial('address',['addresses'=>$addresses]);
+    }
+
+    //>>添加收货地址
+    public function actionAddAddress(){
+        $request = Yii::$app->request;
+        if($request->isPost){
+            $model = new Address();
+            $model->load($request->post(),'');
+
+            $model->member_id = Yii::$app->user->id;
+            $model->province = Locations::findOne(['id'=>$request->post('province')])->name;
+            $model->city = Locations::findOne(['id'=>$request->post('city')])->name;
+            $model->area = Locations::findOne(['id'=>$request->post('area')])->name;
+            //var_dump($model);exit;
+            if($model->validate()) {
+                $model->save();
+                return $this->redirect(['address']);
+            }else{
+                return $model->getErrors();
+            }
+        }
+        return false;
+    }
+
+    //>>删除收货地址
+    public function actionDelAddress(){
+        $id = Yii::$app->request->post('id');
+        $address = Address::findOne(['id'=>$id]);
+        if($address->delete()){
+            echo 'success';
+        }else{
+            echo 'fail';
+        }
+    }
+
+    //>>修改收货地址 : 还没做完
+    public function actionEditAddress($id){
+        $request = Yii::$app->request;
+        $addresses = Address::find()->where(['member_id'=>Yii::$app->user->id])->all();
+        $address_one = Address::findOne(['id'=>$id]);
+        if($request->isPost){
+            $model = new Address();
+            $model->load($request->post(),'');
+
+            $model->member_id = Yii::$app->user->id;
+            $model->province = Locations::findOne(['id'=>$request->post('province')])->name;
+            $model->city = Locations::findOne(['id'=>$request->post('city')])->name;
+            $model->area = Locations::findOne(['id'=>$request->post('area')])->name;
+            //var_dump($model);exit;
+            if($model->validate()) {
+                $model->save();
+                return $this->redirect(['address']);
+            }else{
+                return $model->getErrors();
+            }
+        }
+        return $this->renderPartial('address',['addresses'=>$addresses,'address_one'=>$address_one]);
+    }
+
+    //>>三级联动
+    public function actionLocations($pid){
+        $data = Locations::find()->where(['parent_id'=>$pid])->asArray()->all();
+        echo json_encode($data);
+    }
     //>>发短信
     public function actionSms(){
+        /**
+         * 短信验证码实际应该保存到redis,这里使用session来测试
+         * 短信优化
+         * 有效期:5-30分钟 使用redis的过期机制
+         * 刷短信:限制发送频率,一个手机号码1分钟只能发送一条短信 一天只能发20条
+         * 识别脚本:验证码(发送短信前需要先输入验证码)
+         * 网络不好,用户一次收到多条短信:短时间内发送同样的验证码;给短信编号
+         */
         //接收电话号码
         $phone = Yii::$app->request->post('phone');
+
+        //发送前 : 判断是否能够发送短信
+        //1 . 一个手机一分钟只能发送一条短信
+        $time = Yii::$app->session->get('time_'.$phone);//上次发送短信的时间
+        //如果有这个session 并且 当前事前时间减去上次发送的时间小于60秒,则判断为 '恶意刷短信'
+        if($time && (time() - $time < 60)){
+            //处理不能发送的情况
+            echo '两次短信发送的间隔必须超过一分钟';exit;
+        }
+        //利用最后一次发送时间检查上一次发送短信的时间是否是今天
+        if(date('Ymd',$time) < date('Ymd')){
+            //最后一次不是今天发送的短信,说明短信发送的次数应该清零了
+            Yii::$app->session->set('count_'.$phone,0);
+        }
+
+        //2 . 一天只能发20条
+        $count = Yii::$app->session->get('count_'.$phone);//上次发送短信的次数
+        if($count && ($count >= 20)){
+            //处理不能发送的情况
+            echo '今天发送次数已超过20次,请明天再试';exit;
+        }
+
         $code = rand(1000,9999);
-        Yii::$app->session->set('code_'.$phone,$code);
+        Yii::$app->session->set('code_'.$phone,$code);//保存短信内容
+        Yii::$app->session->set('time_'.$phone,time());//保存短信发送的时间
+        Yii::$app->session->set('count_'.$phone,++$count);//保存短信发送的次数 这里使用了先运算再赋值的技巧,可以在变量不存在的情况下使用
 
         /*$demo = new SmsDemo(
             "LTAIgQIRelVvjUv6",  //AK

@@ -81,7 +81,7 @@
                         <a href="javascript:;" class="add_num"></a>
                     </td>
                     <td class="col5">￥<span><?=$good->shop_price * $cart[$good->id]?></span></td>
-                    <td class="col6"><a href="javascript:;" class="del_cart" onclick="">删除</a></td>
+                    <td class="col6"><a href="javascript:;" class="del_cart" onclick="delCart(this)">删除</a></td>
                 </tr>
             <?php endforeach;?>
 			</tbody>
@@ -93,7 +93,7 @@
 		</table>
 		<div class="cart_btn w990 bc mt10">
 			<a href="<?=\yii\helpers\Url::to(['goods/index'])?>" class="continue">继续购物</a>
-			<a href="" class="checkout">结 算</a>
+			<a href="<?=\yii\helpers\Url::to(['order/order'])?>" class="checkout">结 算</a>
 		</div>
 	</div>
 	<!-- 主体部分 end -->

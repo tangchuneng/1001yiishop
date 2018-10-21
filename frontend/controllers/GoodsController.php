@@ -19,7 +19,7 @@ class GoodsController extends \yii\web\Controller{
     //>>首页
     public function actionIndex()
     {
-        //获取所有商品以及分类
+        //获取所有一级分类
         $categories1 = GoodsCategory::find()->where(['parent_id'=>0])->all();
         return $this->renderPartial('index',['categories1'=>$categories1]);
     }
@@ -182,7 +182,32 @@ class GoodsController extends \yii\web\Controller{
     }
 
     //>>删除购物车商品
-    public function actionDelCart($id){
-        echo 'success';
+    public function actionDelCart(){
+        $id = \Yii::$app->request->post('id');
+        if(\Yii::$app->user->isGuest){
+            //未登录 从cookie中取
+            $cookies = \Yii::$app->request->cookies;
+            $value = unserialize($cookies->getValue('carts'));
+            if($value){
+                unset($value[$id]);
+
+                $cookies2 = \Yii::$app->response->cookies;
+                $cookie = new Cookie();
+                $cookie->name = 'carts';
+                $cookie->value = serialize($value);
+                $cookie->expire = time()+3600*24;
+                $cookies2->add($cookie);
+                echo 'success';
+            }else{
+                echo 'fail';
+            }
+        }else{
+            $cart = Cart::findOne(['goods_id'=>$id,'member_id'=>\Yii::$app->user->id]);
+            if($cart->delete()){
+                echo 'success';
+            }else{
+                echo 'fail';
+            }
+        }
     }
 }

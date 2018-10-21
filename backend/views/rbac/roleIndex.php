@@ -33,11 +33,11 @@
             </td>
             <td width="80px">
                 <!--原始的修改方法-->
-                <a href="<?= \yii\helpers\Url::to(['rbac/edit-role','name'=>$role->name]) ?>" class="btn btn-default exit_btn">
+                <a href="<?= \yii\helpers\Url::to(['rbac/edit-role','name'=>$role->name]) ?>" class="btn btn-success exit_btn">
                     <span class="glyphicon glyphicon-pencil">修改</span>
                 </a>
                 <!--使用ajax删除-->
-                <a href="javascript:;" class="btn btn-default del_btn">
+                <a href="javascript:;" class="btn btn-danger del_btn">
                     <span class="glyphicon glyphicon-trash">删除</span>
             </td>
         </tr>
