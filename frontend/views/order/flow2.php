@@ -159,7 +159,7 @@
                 $total_price = 0;
                 foreach ($goods as $good): $total_price += $good->shop_price * $amount[$good->id]?>
                 <tr>
-                    <td class="col1"><a href=""><img src="<?=Yii::getAlias('@web')?>/template/images/xiao.jpg" alt="" /></a>
+                    <td class="col1"><a href=""><img src="<?='http://admin.yiishop.com'.$good->logo?>" alt="" /></a>
                         <strong><a href=""><?=$good->name?></a></strong>
                     </td>
                     <td class="col3">￥<?=$good->shop_price?></td>

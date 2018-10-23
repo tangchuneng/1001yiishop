@@ -94,6 +94,8 @@ class OrderController extends Controller{
 
                     //无异常,提交事务
                     $transaction->commit();
+                    //删除购物车的信息
+                    
                     //跳转到下单成功提示页
                     $this->redirect(['success']);
                 }
@@ -115,5 +117,16 @@ class OrderController extends Controller{
     //>>订单提交成功
     public function actionSuccess(){
         return $this->renderPartial('flow3');
+    }
+
+    //>>订单列表
+    public function actionIndex(){
+        if(\Yii::$app->user->isGuest){
+            exit('请先登录');
+        }
+        $user = \Yii::$app->user->identity;
+        $models = Order::find()->where(['member_id'=>$user->getId()])->all();
+
+        return $this->renderPartial('index',['models'=>$models]);
     }
 }

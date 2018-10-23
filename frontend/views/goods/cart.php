@@ -23,7 +23,7 @@
 			</div>
 			<div class="topnav_right fr">
 				<ul>
-					<li>您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>]
+					<li id="user_status">您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>]
                         [<a href="<a href="<?=\yii\helpers\Url::to(['member/regist'])?>">免费注册</a>] </li>
 					<li class="line">|</li>
 					<li>我的订单</li>
@@ -41,7 +41,7 @@
 	<!-- 页面头部 start -->
 	<div class="header w990 bc mt15">
 		<div class="logo w990">
-			<h2 class="fl"><a href="<a href="<?=\yii\helpers\Url::to(['goods/index'])?>"><img src="<?=Yii::getAlias('@web')?>/template/images/logo.png" alt="京西商城"></a></h2>
+            <h1 class="fl"><a href="<?=\yii\helpers\Url::to(['goods/index'])?>"><img src="<?=Yii::getAlias('@web')?>/template/images/logo.png" alt="京西商城"></a></h1>
 			<div class="flow fr">
 				<ul>
 					<li class="cur">1.我的购物车</li>
@@ -71,7 +71,7 @@
 			<tbody>
             <?php foreach ($goods as $good): ?>
                 <tr data-id="<?=$good->id?>">
-                    <td class="col1"><a href=""><img src="<?=Yii::getAlias('@web')?>/template/images/xiao.jpg" alt="" /></a>
+                    <td class="col1"><a href=""><img src="<?='http://admin.yiishop.com'.$good->logo?>" alt="" /></a>
                         <strong><a href="<?=\yii\helpers\Url::to(['goods/details','id'=>$good->id])?>"><?=$good->name?></a></strong>
                     </td>
                     <td class="col3">￥<span><?=$good->shop_price?></span></td>
@@ -125,5 +125,12 @@
 		</p>
 	</div>
 	<!-- 底部版权 end -->
+    <script type="text/javascript">
+        $.getJSON("<?=\yii\helpers\Url::to(['member/user-status'])?>",function (json) {
+            if(json.isLogin){
+                $("#user_status").html("欢迎&nbsp[" + json.name + "]&nbsp<a href='<?=\yii\helpers\Url::to(['member/logout'])?>'>注销</a>");
+            }
+        });
+    </script>
 </body>
 </html>

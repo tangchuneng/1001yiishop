@@ -139,8 +139,26 @@
             </div>
 
             <div class="cat_bd">
-            <!--读取 redis 缓存-->
-            <?=\backend\models\GoodsCategory::getGoodsCategories()?>
+
+                <!--遍历的时候要注意第一项与后面选项 class 的不同,可用三元运算符判断 $k-->
+                <?php foreach ($categories1 as $k1=>$category1):?>
+                    <div class="<?= $k1?'cat':'cat item1'?>">
+                        <h3><a href="<?=\yii\helpers\Url::to(["goods/list?id=$category1->id"])?>"><?=$category1->name?></a><b></b></h3>
+                        <div class="cat_detail">
+                            <?php foreach ($category1->children(1)->all() as $k2=>$category2):?>
+                                <dl class="<?= $k2?'':'dl_1st'?>">
+                                    <dt><a href="<?=\yii\helpers\Url::to(["goods/list?id=$category2->id"])?>"><?=$category2->name?></a></dt>
+                                    <?php foreach ($category2->children()->all() as $category3):?>
+                                        <dd>
+                                            <a href="<?=\yii\helpers\Url::to(["goods/list?id=$category3->id"])?>"><?=$category3->name?></a>
+                                        </dd>
+                                    <?php endforeach;?>
+                                </dl>
+                            <?php endforeach;?>
+                        </div>
+                    </div>
+                <?php endforeach;?>
+
             </div>
         </div>
         <!--  商品分类部分 end-->

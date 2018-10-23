@@ -95,4 +95,20 @@ class ArticleController extends \yii\web\Controller
         }
         return 'fail';
     }
+
+    //>>
+    public function actions()
+    {
+        return [
+            //配置UEditor,文件上传相关配置
+            'upload' => [
+                'class' => 'kucha\ueditor\UEditorAction',
+                'config' => [
+                    "imageUrlPrefix"  => "http://admin.yiishop.com",//图片访问路径前缀
+                    "imagePathFormat" => "/upload/article/{yyyy}{mm}{dd}/{time}{rand:6}" ,//上传保存路径
+                    "imageRoot" => \Yii::getAlias("@webroot"),
+                ],
+            ]
+        ];
+    }
 }

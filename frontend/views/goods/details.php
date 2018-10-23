@@ -47,7 +47,7 @@
 			</div>
 			<div class="topnav_right fr">
 				<ul>
-					<li>您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>]
+					<li id="user_status">您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>]
                         [<a href="<a href="<?=\yii\helpers\Url::to(['member/regist'])?>">免费注册</a>]
                     </li>
 					<li class="line">|</li>
@@ -562,8 +562,8 @@
 				<!-- 图片预览区域 start -->
 				<div class="preview fl">
 					<div class="midpic">
-						<a href="" class="jqzoom" rel="gal1"><!-- 第一幅图片的大图 class 和 rel属性不能更改 -->
-							<img src="<?=Yii::getAlias('@backend').'/web'.$model->logo?>" alt="" /><!-- 第一幅图片的中图 -->
+						<a href="<?='http://admin.yiishop.com'.$model->logo?>" class="jqzoom" rel="gal1"><!-- 第一幅图片的大图 class 和 rel属性不能更改 -->
+							<img src="<?='http://admin.yiishop.com'.$model->logo?>" alt="" /><!-- 第一幅图片的中图 -->
 						</a>
 					</div>
 	
@@ -1022,6 +1022,11 @@
 
 	<script type="text/javascript">
 		document.execCommand("BackgroundImageCache", false, true);
+        $.getJSON("<?=\yii\helpers\Url::to(['member/user-status'])?>",function (json) {
+            if(json.isLogin){
+                $("#user_status").html("欢迎&nbsp[" + json.name + "]&nbsp<a href='<?=\yii\helpers\Url::to(['member/logout'])?>'>注销</a>");
+            }
+        });
 	</script>
 </body>
 </html>

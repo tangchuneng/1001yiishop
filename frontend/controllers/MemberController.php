@@ -222,6 +222,20 @@ class MemberController extends \yii\web\Controller
         return 'true';
     }
 
+    //>>Ajax获取登录状态
+    public function actionUserStatus(){
+        $user = Yii::$app->user->identity;
+        if($user){
+            $isLogin = true;
+            $username = $user->username;
+        }else{
+            $isLogin = false;
+            $username = '';
+        }
+        //var_dump($isLogin,$username);exit;
+        return json_encode(['isLogin'=>$isLogin,'name'=>$username]);
+    }
+
     //>>测试redis
     public function actionRedis(){
         $redis = new \Redis();

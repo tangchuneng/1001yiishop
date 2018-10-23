@@ -16,12 +16,29 @@ use yii\web\Cookie;
 
 class GoodsController extends \yii\web\Controller{
     public $enableCsrfValidation = false;
+
     //>>首页
     public function actionIndex()
     {
-        //获取所有一级分类
+        //原始的渲染首页的方法
         $categories1 = GoodsCategory::find()->where(['parent_id'=>0])->all();
-        return $this->renderPartial('index',['categories1'=>$categories1]);
+        return $this->renderPartial('index2',['categories1'=>$categories1]);
+
+        /**
+         * 常规使用ob缓存的步骤
+         * ob_start();//开启ob
+         * echo '123456';//页面输出
+         * $data = ob_get_contents();//获取ob缓存内容
+         * file_put_contents('index.html',$data);//保存到静态页面
+         */
+
+        /**
+         * 使用Yii的ob缓存机制:
+         * 在后台的System控制器中
+         * 调用 IndexStatic() 方法
+         */
+
+        //return $this->renderPartial('index');
     }
 
     //>>商品列表
