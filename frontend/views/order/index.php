@@ -502,8 +502,8 @@
 							<td><?=$model->name?></td>
 							<td>￥<?=$model->total?>&emsp;<?=$model->delivery_name?></td>
 							<td><?=date('Y-m-n H:m:s',$model->create_time)?></td>
-							<td>待付款</td>
-							<td><a href="">查看</a> | <a href="">删除</a></td>
+							<td><?=$model->status?></td>
+							<td><a href="">查看</a> | <a href="">删除</a> | <a href="<?=\yii\helpers\Url::to(['order/pay'])?>">支付</a></td>
 						</tr>
                     <?php endforeach;?>
 					</tbody> 

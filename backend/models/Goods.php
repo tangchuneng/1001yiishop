@@ -68,4 +68,9 @@ class Goods extends \yii\db\ActiveRecord
             'view_times' => '浏览次数',
         ];
     }
+
+    //>>商品与相册关系 一对多
+    public function getGalleries(){
+        return $this->hasMany(GoodsGallery::className(),['goods_id'=>'id']);
+    }
 }

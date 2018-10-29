@@ -15,6 +15,7 @@ use backend\filters\RbacFilter;
 
 class GoodsController extends \yii\web\Controller
 {
+    //public $enableCsrfValidation = false;
     //>>商品列表(分页展示)
     public function actionIndex()
     {
@@ -57,7 +58,7 @@ class GoodsController extends \yii\web\Controller
         $category = new GoodsCategory();//分类实例
         $goods_intro = new GoodsIntro();//商品详情实例
         $goods_day_count = new GoodsDayCount();
-        $goods_gallery = new GoodsGallery();
+        //$goods_gallery = new GoodsGallery();
 
         $request = \Yii::$app->request;
         if($request->isPost){
@@ -88,9 +89,9 @@ class GoodsController extends \yii\web\Controller
                 $goods_intro->goods_id = $model->id;
                 $goods_intro->save();
                 //保存商品图片,只能放在模型保存过后
-                $goods_gallery->goods_id = $model->id;
+                /*$goods_gallery->goods_id = $model->id;
                 $goods_gallery->path = $model->logo;
-                $goods_gallery->save();
+                $goods_gallery->save();*/
 
                 \Yii::$app->session->setFlash('success','添加成功');
                 return $this->redirect(Url::to(['goods/index']));
@@ -102,7 +103,7 @@ class GoodsController extends \yii\web\Controller
             'model'=>$model,
             'category'=>$category,
             'goods_intro'=>$goods_intro,
-            'goods_gallery'=>$goods_gallery,
+            //'goods_gallery'=>$goods_gallery,
         ]);
     }
 
@@ -175,9 +176,17 @@ class GoodsController extends \yii\web\Controller
         }
     }
 
-    //>>预览
-    public function actionGallery(){
-        echo '暂无图片';
+    //>>预览相册
+    public function actionGallery($id){
+        $goods = Goods::findOne(['id'=>$id]);
+        return $this->render('gallery',['goods'=>$goods]);
+    }
+
+    //>>Ajax删除相册图片
+    public function actionDelGallery(){
+        $id = \Yii::$app->request->post('id');
+        $model = GoodsGallery::findOne(['id'=>$id]);
+        $model->delete();
     }
 
     //使用 Web Uploadify（AJAX上传）插件上传图片,上传成功后回显图片
@@ -232,6 +241,14 @@ class GoodsController extends \yii\web\Controller
                     //$action->getFilename(); // "image/yyyymmddtimerand.jpg"
                     //$action->getWebUrl(); //  "baseUrl + filename, /upload/image/yyyymmddtimerand.jpg"
                     //$action->getSavePath(); // "/var/www/htdocs/upload/image/yyyymmddtimerand.jpg"
+
+                    //获取商品id
+                    $goods_id = \Yii::$app->request->post('goods_id');
+                    $gallery = new GoodsGallery();
+                    $gallery->path = $action->getWebUrl();
+                    $gallery->goods_id = $goods_id;
+                    $gallery->save();
+                    $action->output['imgId'] = $gallery->id;
                 }
             ],
             //配置UEditor,文件上传相关配置

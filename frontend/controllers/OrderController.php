@@ -14,6 +14,7 @@ use frontend\models\Order;
 use frontend\models\OrderGoods;
 use yii\db\Exception;
 use yii\web\Controller;
+use yii\web\HttpException;
 
 class OrderController extends Controller{
     public $enableCsrfValidation = false;
@@ -71,6 +72,7 @@ class OrderController extends Controller{
                 }else{
                     exit('验证失败!');
                 }
+
                 //订单商品详情表order_goods
                 foreach ($goods as $good){
                     //检查库存
@@ -78,6 +80,10 @@ class OrderController extends Controller{
                         //库存不足,不能下单:抛出异常
                         throw new Exception($good->name.'&nbsp;:&nbsp;商品库存不足,不能下单.还剩余'.$good->stock.'件,请到购物车修改数量.');
                     }
+                    //下单成功则扣减库存扣减库存
+                    $good->stock -= $amount[$good->id];
+                    $good->save(false);
+
                     $order_goods = new OrderGoods();
                     $order_goods->order_id = $model->id;
                     $order_goods->goods_id = $good->id;
@@ -95,7 +101,7 @@ class OrderController extends Controller{
                     //无异常,提交事务
                     $transaction->commit();
                     //删除购物车的信息
-                    
+
                     //跳转到下单成功提示页
                     $this->redirect(['success']);
                 }
@@ -128,5 +134,15 @@ class OrderController extends Controller{
         $models = Order::find()->where(['member_id'=>$user->getId()])->all();
 
         return $this->renderPartial('index',['models'=>$models]);
+    }
+
+    //>>微信支付
+    public function actionPay($order_id){
+        $model = Order::findOne(['id'=>$order_id,'status'=>1]);
+        //判断订单是否存在
+        if($model == null){
+            throw new HttpException(404,'该订单不存在或以支付');
+        }
+        //存在
     }
 }

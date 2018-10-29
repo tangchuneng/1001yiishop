@@ -51,7 +51,7 @@
                         [<a href="<a href="<?=\yii\helpers\Url::to(['member/regist'])?>">免费注册</a>]
                     </li>
 					<li class="line">|</li>
-					<li>我的订单</li>
+                    <li><a href="<?=\yii\helpers\Url::to(['order/index'])?>">我的订单</a></li>
 					<li class="line">|</li>
 					<li>客户服务</li>
 
@@ -99,14 +99,14 @@
 						<b></b>
 					</dt>
 					<dd>
-						<div class="prompt">
-							您好，请<a href="">登录</a>
+						<div class="prompt" id="user_status2">
+							您好，请<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>
 						</div>
 						<div class="uclist mt10">
 							<ul class="list1 fl">
 								<li><a href="">用户信息></a></li>
-								<li><a href="">我的订单></a></li>
-								<li><a href="">收货地址></a></li>
+								<li><a href="<?=\yii\helpers\Url::to(['order/index'])?>">我的订单></a></li>
+								<li><a href="<?=\yii\helpers\Url::to(['member/address'])?>">收货地址></a></li>
 								<li><a href="">我的收藏></a></li>
 							</ul>
 
@@ -563,7 +563,7 @@
 				<div class="preview fl">
 					<div class="midpic">
 						<a href="<?='http://admin.yiishop.com'.$model->logo?>" class="jqzoom" rel="gal1"><!-- 第一幅图片的大图 class 和 rel属性不能更改 -->
-							<img src="<?='http://admin.yiishop.com'.$model->logo?>" alt="" /><!-- 第一幅图片的中图 -->
+							<img src="<?='http://admin.yiishop.com'.$model->logo?>" width="300px" alt="" /><!-- 第一幅图片的中图 -->
 						</a>
 					</div>
 	
@@ -629,7 +629,7 @@
 						<li class="market_price"><span>定价：</span><em>￥<?=$model->market_price?></em></li>
 						<li class="shop_price"><span>本店价：</span> <strong>￥<?=$model->shop_price?></strong> <a href="">(降价通知)</a></li>
 						<li><span>上架时间：</span><?=date('Y-m-n',$model->create_time)?></li>
-						<li class="star"><span>商品评分：</span> <strong></strong><a href="">(已有21人评价)</a></li> <!-- 此处的星级切换css即可 默认为5星 star4 表示4星 star3 表示3星 star2表示2星 star1表示1星 -->
+						<li class="" id="view_times"><span>商品人气：</span><strong></strong></li> <!-- 此处的星级切换css即可 默认为5星 star4 表示4星 star3 表示3星 star2表示2星 star1表示1星 -->
 					</ul>
 					<form action="<?=\yii\helpers\Url::to(["goods/addtocart"])?>" method="get" class="choose">
 						<ul>
@@ -1025,8 +1025,13 @@
         $.getJSON("<?=\yii\helpers\Url::to(['member/user-status'])?>",function (json) {
             if(json.isLogin){
                 $("#user_status").html("欢迎&nbsp[" + json.name + "]&nbsp<a href='<?=\yii\helpers\Url::to(['member/logout'])?>'>注销</a>");
+                $("#user_status2").html("欢迎&nbsp[" + json.name + "]&nbsp<a href='<?=\yii\helpers\Url::to(['member/logout'])?>'>注销</a>");
             }
         });
+        
+        $.get("/goods/view-times?id=<?=$model->id?>",function (data) {
+            $("#view_times strong").text(data);
+        })
 	</script>
 </body>
 </html>

@@ -28,7 +28,7 @@
                     [<a href="<?=\yii\helpers\Url::to(['member/regist'])?>">免费注册</a>]
                 </li>
                 <li class="line">|</li>
-                <li>我的订单</li>
+                <li><a href="<?=\yii\helpers\Url::to(['order/index'])?>">我的订单</a></li>
                 <li class="line">|</li>
                 <li>客户服务</li>
 

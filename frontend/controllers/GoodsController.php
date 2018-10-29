@@ -76,10 +76,35 @@ class GoodsController extends \yii\web\Controller{
     public function actionDetails($id){
         $model = Goods::findOne($id);
         $goods_intro = GoodsIntro::findOne(['goods_id'=>$model->id]);
+        /*$model->view_times++;
+        $model->save();*/
+        $model->updateCounters(['view_times'=>1],'id='.$model->id);//没浏览一次就加一
         return $this->renderPartial('details',[
             'model'=>$model,
             'goods_intro'=>$goods_intro,
         ]);
+    }
+
+    //>>Ajax 获取商品浏览次数
+    public function actionViewTimes($id){
+        //使用redis优化查询性能
+        $redis = new \Redis();
+        $redis->connect('127.0.0.1');
+        $times = $redis->get('times_'.$id);
+        if($times === false){
+            $model = Goods::findOne($id);
+            if($model){
+                $model->updateCounters(['view_times'=>1],'id='.$model->id);
+                $redis->set('times_'.$model->id,$model->view_times);
+                $times = $model->view_times;
+            }
+        }
+        //每一百次回写一次(将redis中的值写到数据表)
+        if($times%10 == 0){
+            Goods::updateAll(['view_times'=>$times],['id'=>$id]);
+        }
+        $redis->incr('times_'.$id);//让redis中的值自动加一
+        return $times;
     }
 
     //>>添加到购物车

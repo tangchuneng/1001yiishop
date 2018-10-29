@@ -236,6 +236,19 @@ class MemberController extends \yii\web\Controller
         return json_encode(['isLogin'=>$isLogin,'name'=>$username]);
     }
 
+    //>>发送邮件
+    public function actionEmail(){
+        $result = Yii::$app->mailer->compose()
+            ->setFrom('18780111552@163.com')//发件人
+            ->setTo('18780111552@163.com')//收件人
+            ->setSubject('京西商城测试')//主题
+            ->setHtmlBody(
+                '为了方便您使用邮箱，建议您安装 邮箱大师 ，不仅能随时随地收发邮件，还有最快的新邮件免费提醒等功能哦！'
+            )//内容
+            ->send();//发送
+        var_dump($result);
+    }
+
     //>>测试redis
     public function actionRedis(){
         $redis = new \Redis();
