@@ -202,9 +202,10 @@
     </div>
     <div class="fillin_ft">
         <input id="submit_price" type="hidden" name="total"/>
-        <p><input type="submit" value="提交订单" /></p>
-        <!--<a href="" onclick="document.getElementById('_form').submit();"><span></span></a>-->
-        <p id="total_price2">应付总额：<strong>￥元</strong></p>
+        <p><input type="submit" value="提交订单"/></p>
+        <!--使用a标签提交form表单-->
+        <!--<a href="" onclick="javascript:document.getElementById('_form').submit();"></a>-->
+        <p>应付总额：<strong id="total_price2">￥元</strong></p>
     </div>
     </form>
 </div>
@@ -243,13 +244,13 @@
     //输出配送方式的价格
     $("input[name = 'delivery_id']").click(function () {
         //console.log(this);
-        var delivery_price = $(this).closest('tr').attr('data-price');
+        var delivery_price = parseInt($(this).closest('tr').attr('data-price'));
         $("#delivery-price em").text('￥'+ delivery_price);
-        var totalPrice = $("#total_price").attr('data-price');
-        console.log(totalPrice + delivery_price);
+        var totalPrice = parseInt($("#total_price").attr('data-price'));
+        console.debug(delivery_price+totalPrice);
 
-        $("#total_price1 em").text('￥'+ totalPrice + delivery_price);
-        $("#total_price2").text('￥'+ totalPrice + delivery_price);
+        $("#total_price1 em").text('￥'+ (totalPrice + delivery_price));
+        $("#total_price2").text('￥'+ (totalPrice + delivery_price));
         $("#submit_price").val(totalPrice + delivery_price);
     });
 </script>

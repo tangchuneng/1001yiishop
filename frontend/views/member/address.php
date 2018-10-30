@@ -25,11 +25,11 @@
 			</div>
 			<div class="topnav_right fr">
 				<ul>
-                    <li>您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>]
+                    <li id="user_status">您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>]
                         [<a href="<?=\yii\helpers\Url::to(['member/regist'])?>">免费注册</a>]
                     </li>
 					<li class="line">|</li>
-					<li>我的订单</li>
+					<li><a href="<?=\yii\helpers\Url::to(['order/index'])?>">我的订单</a></li>
 					<li class="line">|</li>
 					<li>客户服务</li>
 
@@ -77,14 +77,14 @@
 						<b></b>
 					</dt>
 					<dd>
-						<div class="prompt">
+						<div class="prompt" id="user_status2">
 							您好，请<a href="">登录</a>
 						</div>
 						<div class="uclist mt10">
 							<ul class="list1 fl">
 								<li><a href="">用户信息></a></li>
-								<li><a href="">我的订单></a></li>
-								<li><a href="">收货地址></a></li>
+								<li><a href="<?=\yii\helpers\Url::to(['order/index'])?>">我的订单></a></li>
+								<li><a href="<?=\yii\helpers\Url::to(['member/address'])?>">收货地址></a></li>
 								<li><a href="">我的收藏></a></li>
 							</ul>
 
@@ -698,6 +698,15 @@
             });
         }
     }
+
+    //ajax请求判断用户登录状态
+    //document.execCommand("BackgroundImageCache", false, true);
+    $.getJSON("<?=\yii\helpers\Url::to(['member/user-status'])?>",function (json) {
+        if(json.isLogin){
+            $("#user_status").html("欢迎&nbsp[" + json.name + "]&nbsp<a href='<?=\yii\helpers\Url::to(['member/logout'])?>'>注销</a>");
+            $("#user_status2").html("欢迎&nbsp[" + json.name + "]&nbsp<a href='<?=\yii\helpers\Url::to(['member/logout'])?>'>注销</a>");
+        }
+    });
 </script>
 </body>
 </html>

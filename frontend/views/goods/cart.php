@@ -26,7 +26,7 @@
 					<li id="user_status">您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>]
                         [<a href="<a href="<?=\yii\helpers\Url::to(['member/regist'])?>">免费注册</a>] </li>
 					<li class="line">|</li>
-					<li>我的订单</li>
+					<li><a href="<?=\yii\helpers\Url::to(["order/index"])?>">我的订单</a></li>
 					<li class="line">|</li>
 					<li>客户服务</li>
 
@@ -71,7 +71,7 @@
 			<tbody>
             <?php foreach ($goods as $good): ?>
                 <tr data-id="<?=$good->id?>">
-                    <td class="col1"><a href=""><img src="<?='http://admin.yiishop.com'.$good->logo?>" alt="" /></a>
+                    <td class="col1"><a href="<?=\yii\helpers\Url::to(['goods/details','id'=>$good->id])?>"><img src="<?='http://admin.yiishop.com'.$good->logo?>" alt="" /></a>
                         <strong><a href="<?=\yii\helpers\Url::to(['goods/details','id'=>$good->id])?>"><?=$good->name?></a></strong>
                     </td>
                     <td class="col3">￥<span><?=$good->shop_price?></span></td>

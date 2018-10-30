@@ -42,13 +42,13 @@ class OrderController extends Controller{
         $goods = Goods::find()->where(['in','id',$goods_id])->all();
 
         if($request->isPost){
+            //var_dump($request->post());exit;
             $model->load($request->post(),'');
             $address_id = $request->post('address_id');//获取地址的id
             $address = Address::findOne(['id'=>$address_id]);
             $delivery_id = $request->post('delivery_id');
             $payment_id = $request->post('payment_id');
             //赋值
-            //var_dump($model);exit;
             $model->member_id = \Yii::$app->user->id;//保存用户id
             $model->name = $address->name;
             $model->province = $address->province;
@@ -80,7 +80,7 @@ class OrderController extends Controller{
                         //库存不足,不能下单:抛出异常
                         throw new Exception($good->name.'&nbsp;:&nbsp;商品库存不足,不能下单.还剩余'.$good->stock.'件,请到购物车修改数量.');
                     }
-                    //下单成功则扣减库存扣减库存
+                    //下单成功则扣减库存
                     $good->stock -= $amount[$good->id];
                     $good->save(false);
 
@@ -134,6 +134,27 @@ class OrderController extends Controller{
         $models = Order::find()->where(['member_id'=>$user->getId()])->all();
 
         return $this->renderPartial('index',['models'=>$models]);
+    }
+
+    //>>判断订单状态
+    public function actionOrderStatus($id){
+        $order_one = Order::findOne(['id'=>$id]);
+        switch($order_one){
+            case 0:
+                echo '已取消';
+                break;
+            case 1:
+                echo '待付款';
+                break;
+            case 2:
+                echo '待发货';
+                break;
+            case 3:
+                echo '待收货';
+                break;
+            default:
+                echo '完成';
+        }
     }
 
     //>>微信支付

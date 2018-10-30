@@ -9,6 +9,8 @@
     <?=\yii\helpers\Html::cssFile('@web/template/style/header.css')?>
     <?=\yii\helpers\Html::cssFile('@web/template/style/footer.css')?>
     <?=\yii\helpers\Html::cssFile('@web/template/style/success.css')?>
+    <!--引入JS文件-->
+    <?=\yii\helpers\Html::jsFile('@web/template/js/jquery-1.8.3.min.js')?>
 </head>
 <body>
 	<!-- 顶部导航 start -->
@@ -18,16 +20,15 @@
 				
 			</div>
 			<div class="topnav_right fr">
-				<ul>
-					<li>您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>]
-                        [<a href="<?=\yii\helpers\Url::to(['member/regist'])?>">免费注册</a>]
+                <ul>
+                    <li id="user_status">您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>]
+                        [<a href="<a href="<?=\yii\helpers\Url::to(['member/regist'])?>">免费注册</a>]
                     </li>
-					<li class="line">|</li>
-					<li>我的订单</li>
-					<li class="line">|</li>
-					<li>客户服务</li>
-
-				</ul>
+                    <li class="line">|</li>
+                    <li><a href="<?=\yii\helpers\Url::to(['order/index'])?>">我的订单</a></li>
+                    <li class="line">|</li>
+                    <li>客户服务</li>
+                </ul>
 			</div>
 		</div>
 	</div>
@@ -60,7 +61,11 @@
 		<div class="success_bd">
 			<p><span></span>订单提交成功，我们将及时为您处理</p>
 			
-			<p class="message">完成支付后，你可以 <a href="<?=\yii\helpers\Url::to(['index'])?>">查看订单状态</a>  <a href="">继续购物</a> <a href="">问题反馈</a></p>
+			<p class="message">完成支付后，你可以
+                <a href="<?=\yii\helpers\Url::to(['index'])?>">查看订单状态</a>
+                <a href="<?=\yii\helpers\Url::to(['goods/index'])?>">继续购物</a>
+                <a href="">问题反馈</a>
+            </p>
 		</div>
 	</div>
 	<!-- 主体部分 end -->
@@ -92,5 +97,15 @@
 		</p>
 	</div>
 	<!-- 底部版权 end -->
+
+    <script type="text/javascript">
+        //ajax请求判断用户登录状态
+        //document.execCommand("BackgroundImageCache", false, true);
+        $.getJSON("<?=\yii\helpers\Url::to(['member/user-status'])?>",function (json) {
+            if(json.isLogin){
+                $("#user_status").html("欢迎&nbsp[" + json.name + "]&nbsp<a href='<?=\yii\helpers\Url::to(['member/logout'])?>'>注销</a>");
+            }
+        });
+    </script>
 </body>
 </html>

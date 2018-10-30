@@ -54,7 +54,6 @@
                     <li><a href="<?=\yii\helpers\Url::to(['order/index'])?>">我的订单</a></li>
 					<li class="line">|</li>
 					<li>客户服务</li>
-
 				</ul>
 			</div>
 		</div>
@@ -1021,6 +1020,7 @@
 	<!-- 底部版权 end -->
 
 	<script type="text/javascript">
+        //ajax请求判断用户登录状态
 		document.execCommand("BackgroundImageCache", false, true);
         $.getJSON("<?=\yii\helpers\Url::to(['member/user-status'])?>",function (json) {
             if(json.isLogin){

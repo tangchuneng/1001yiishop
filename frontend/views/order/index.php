@@ -25,11 +25,10 @@
 			</div>
 			<div class="topnav_right fr">
 				<ul>
-                    <li>您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>]
+                    <li id="user_status">您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>]
                         [<a href="<?=\yii\helpers\Url::to(['member/regist'])?>">免费注册</a>] </li>
-                    <li class="line">|</li>
 					<li class="line">|</li>
-					<li>我的订单</li>
+                    <li><a href="<?=\yii\helpers\Url::to(['order/index'])?>">我的订单</a></li>
 					<li class="line">|</li>
 					<li>客户服务</li>
 
@@ -77,14 +76,14 @@
 						<b></b>
 					</dt>
 					<dd>
-						<div class="prompt">
+						<div class="prompt" id="user_status2">
 							您好，请<a href="">登录</a>
 						</div>
 						<div class="uclist mt10">
 							<ul class="list1 fl">
 								<li><a href="">用户信息></a></li>
-								<li><a href="">我的订单></a></li>
-								<li><a href="">收货地址></a></li>
+								<li><a href="<?=\yii\helpers\Url::to(['order/index'])?>">我的订单></a></li>
+								<li><a href="<?=\yii\helpers\Url::to(['member/address'])?>">收货地址></a></li>
 								<li><a href="">我的收藏></a></li>
 							</ul>
 
@@ -114,7 +113,7 @@
 			<div class="cart fl">
 				<dl>
 					<dt>
-						<a href="">去购物车结算</a>
+						<a href="<?=\yii\helpers\Url::to(['goods/cart'])?>">去购物车结算</a>
 						<b></b>
 					</dt>
 					<dd>
@@ -496,13 +495,13 @@
 					</thead>
 					<tbody>
                     <?php foreach ($models as $model):?>
-						<tr>
+						<tr data-id="<?=$model->id?>" id="order_one">
 							<td><a href=""><?=$model->id?></a></td>
 							<td><a href=""><img src="" alt="图片加载失败" /></a></td>
 							<td><?=$model->name?></td>
 							<td>￥<?=$model->total?>&emsp;<?=$model->delivery_name?></td>
 							<td><?=date('Y-m-n H:m:s',$model->create_time)?></td>
-							<td><?=$model->status?></td>
+							<td><?=$model->status ?></td>
 							<td><a href="">查看</a> | <a href="">删除</a> | <a href="<?=\yii\helpers\Url::to(['order/pay'])?>">支付</a></td>
 						</tr>
                     <?php endforeach;?>
@@ -541,7 +540,6 @@
 			</ul>
 		</div>
 
-		
 		<div class="bnav3">
 			<h3><b></b> <em>支付方式</em></h3>
 			<ul>
@@ -606,5 +604,21 @@
 		</p>
 	</div>
 	<!-- 底部版权 end -->
+
+    <script type="text/javascript">
+        //ajax请求判断用户登录状态
+        //document.execCommand("BackgroundImageCache", false, true);
+        $.getJSON("<?=\yii\helpers\Url::to(['member/user-status'])?>",function (json) {
+            if(json.isLogin){
+                $("#user_status").html("欢迎&nbsp[" + json.name + "]&nbsp<a href='<?=\yii\helpers\Url::to(['member/logout'])?>'>注销</a>");
+                $("#user_status2").html("欢迎&nbsp[" + json.name + "]&nbsp<a href='<?=\yii\helpers\Url::to(['member/logout'])?>'>注销</a>");
+            }
+        });
+        //获取订单状态
+        /*$.getJSON("",{id:},function (json) {
+            var id = $("#order_one").attr('date-id');
+            console.debug(id);
+        });*/
+    </script>
 </body>
 </html>
