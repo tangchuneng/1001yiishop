@@ -29,7 +29,6 @@
                 <li>我的订单</li>
                 <li class="line">|</li>
                 <li>客户服务</li>
-
             </ul>
         </div>
     </div>
@@ -241,6 +240,13 @@
 <!-- 底部版权 end -->
 
 <script type="text/javascript">
+    //ajax请求判断用户登录状态
+    $.getJSON("<?=\yii\helpers\Url::to(['member/user-status'])?>",function (json) {
+        if(json.isLogin){
+            $("#user_status").html("欢迎&nbsp[" + json.name + "]&nbsp<a href='<?=\yii\helpers\Url::to(['member/logout'])?>'>注销</a>");
+        }
+    });
+
     //输出配送方式的价格
     $("input[name = 'delivery_id']").click(function () {
         //console.log(this);

@@ -43,7 +43,7 @@ EOF
 ]);
 //>>>>>>>>>>>>>>>>uploadifive结束
 
-//回显上传后的图片,增加用户体验
+//回显上传后的图片
 echo \yii\bootstrap\Html::img($model->logo,['id'=>'img','height'=>80]);
 echo $form->field($model,'sort')->textInput();
 echo $form->field($model,'is_delete')->inline()->radioList(['隐藏','正常']);

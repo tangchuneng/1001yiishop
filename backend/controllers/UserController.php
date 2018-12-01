@@ -28,7 +28,7 @@ class UserController extends \yii\web\Controller
                 实际在保存之前还有很多操作,这里把操作封装在模型里面.
                 这里会自动调用模型中的 beforeSave() 方法
                 为了更规范,更加体现 MVC 和 OOP 的思想
-                 */
+                */
 
                 //>>注意<<//
                 //save方法默认会再次执行验证 $model->validate(),
@@ -105,7 +105,7 @@ class UserController extends \yii\web\Controller
             $model->last_login_ip = $request->getUserIP();
             //验证
             if($model->login()){
-                \Yii::$app->session->setFlash('success','登录成功');
+                //\Yii::$app->session->setFlash('success','登录成功');
                 return $this->redirect(['goods/index']);
             }
         }

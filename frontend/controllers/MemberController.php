@@ -1,13 +1,9 @@
 <?php
 namespace frontend\controllers;
-
-use backend\models\GoodsCategory;
 use frontend\models\Address;
 use frontend\models\Locations;
 use frontend\models\Member;
-use frontend\models\SmsDemo;
 use Yii;
-
 class MemberController extends \yii\web\Controller
 {
     public $enableCsrfValidation = false;
@@ -16,7 +12,6 @@ class MemberController extends \yii\web\Controller
     public function actionRegist(){
         $model = new Member();
         $request = Yii::$app->request;
-        //var_dump($request->isPost);exit;
         if($request->isPost){
             //注意:加载的时候第二个参数用空表示,因为传过来的表单不是用活动表单创建,传的值不是二维数组
             $model->load($request->post(),'');
@@ -140,6 +135,7 @@ class MemberController extends \yii\web\Controller
         $data = Locations::find()->where(['parent_id'=>$pid])->asArray()->all();
         echo json_encode($data);
     }
+
     //>>发短信
     public function actionSms(){
         /**
