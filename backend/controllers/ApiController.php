@@ -1,4 +1,5 @@
 <?php
+
 namespace backend\controllers;
 
 use yii\helpers\Json;
@@ -21,21 +22,22 @@ class ApiController extends Controller
     }
 
     //1.会员
-    //-会员注册
-    public function actionUserRegister(){
+    //会员注册
+    public function actionUserRegister()
+    {
         $request = \Yii::$app->request;
         $result = [
-            'error'=>true,
-            'msg'=>'', //错误信息 如果有
-            'data'=>[],//返回数据
+            'error' => true,
+            'msg' => '', //错误信息 如果有
+            'data' => [],//返回数据
         ];
-        if($request->isPost){
+        if ($request->isPost) {
             $model = new User();
             $model->username = $request->post('username');
             $model->password = $request->post('password');
             $model->email = $request->post('email');
             $model->status = $request->post('status');
-            if($model->validate()){
+            if ($model->validate()) {
                 $model->save();
                 //注册成功
                 /*$result = [
@@ -45,7 +47,7 @@ class ApiController extends Controller
                 ];*/
                 $result['error'] = false;
                 $result['msg'] = '注册成功';
-            }else{
+            } else {
                 //验证失败
                 /*$result = [
                     'error'=>true,
@@ -55,7 +57,7 @@ class ApiController extends Controller
                 $result['error'] = true;
                 $result['msg'] = '注册失败,请检测错误信息';
             }
-        }else{
+        } else {
             //不是post提交
             /*$result = [
                 'error'=>true,
@@ -67,32 +69,32 @@ class ApiController extends Controller
         }
         return $result;
     }
-    //-会员登录
-    //-修改密码
-    //-获取当前登录的用户信息
-
+    //会员登录
+    //修改密码
+    //获取当前登录的用户信息
 
     //>>测试:接口的安全问题
-    public function actionTest(){
+    public function actionTest()
+    {
         $result = [
-            'error'=>true, //有错误
-            'sg'=>'', //错误信息 如果有
-            'data'=>[],//返回数据
+            'error' => true, //有错误
+            'sg' => '', //错误信息 如果有
+            'data' => [],//返回数据
         ];
         $request = \Yii::$app->request;
 
         //一.对比时间戳 -> 防重防攻击（请求被截获，稍后被重防或多次重防)
         $time = $request->get('time');
         //判断是否有time参数
-        if($time){
+        if ($time) {
             //有参数
-            if(time()-$time > 60){
+            if (time() - $time > 60) {
                 //说明请求参数过期
                 $result['msg'] = '请求参数过期';
-            }else{
+            } else {
                 //二.签名 -> 防篡改攻击,防伪装攻击
                 $sign = $request->get('sign');
-                if($sign){
+                if ($sign) {
                     $data = $request->get();
                     //1.删除传过来的签名,根据其他的数据重新签名
                     unset($data['sign']);
@@ -101,20 +103,20 @@ class ApiController extends Controller
                     //3.连接成字符串
                     $str = http_build_query($data);
                     //4.签名 : 连接token md5 大写
-                    $sign_new = strtoupper(md5($this->token.$str));
+                    $sign_new = strtoupper(md5($this->token . $str));
                     //5.比对新的签名和旧的签名
-                    if($sign_new == $sign){
+                    if ($sign_new == $sign) {
                         $result['error'] = false;
                         $result['msg'] = 'test请求成功';
-                    }else{
+                    } else {
                         $result['msg'] = '签名错误';
                     }
-                }else{
+                } else {
                     $result['error'] = true;
                     $result['msg'] = '缺少签名';
                 }
             }
-        }else{
+        } else {
             //没有参数
             $result['msg'] = '缺少参数';
         }
@@ -123,15 +125,16 @@ class ApiController extends Controller
     }
 
     //签名的原理
-    public function actionSign(){
-        $p = ['e'=>3,'g'=>5,'d'=>2,'time'=>6666666666];
+    public function actionSign()
+    {
+        $p = ['e' => 3, 'g' => 5, 'd' => 2, 'time' => 6666666666];
         //1.对$p按索引进行升序排列
         ksort($p);
         //var_dump($p);
         //2.将数组拼接成字符串 d=25&e=55&g=23&time=12345678
         $s = http_build_query($p);
         //3.将 token 拼接到字符串前面,然后做 md5 运算,将结果转换为大写
-        $sign = strtoupper(md5($this->token.$s));
+        $sign = strtoupper(md5($this->token . $s));
         var_dump($sign);
     }
 }
