@@ -162,7 +162,7 @@ class OrderController extends Controller{
         $model = Order::findOne(['id'=>$order_id,'status'=>1]);
         //判断订单是否存在
         if($model == null){
-            throw new HttpException(404,'该订单不存在或以支付');
+            throw new HttpException(404,'该订单不存在或已支付');
         }
         //存在
     }
